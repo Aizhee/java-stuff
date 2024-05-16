@@ -1,0 +1,10 @@
+https://api.mcsrvstat.us/2/TEOSMPs3.aternos.me
+
+
+$status = json_decode(file_get_contents('https://api.mcsrvstat.us/2/TEOSMPs3.aternos.me'));
+
+
+
+https://discordapp.com/api/webhooks/1005762593283133490/Fy3yH1jxlrCJM_5RKIDBYSpWapXdqMjCvQjUEi-NCTpObk5Ex2cJMyZn62IpTBz3Jb2D
+
+nice
