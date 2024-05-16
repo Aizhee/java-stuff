@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Excersise_Schedule_Generator.java&apos; to &apos;FinalsOOPproj/src/Program&apos;&#x0D;&#x0A;- Original project: &apos;FirstProgram&apos;&#x0D;&#x0A;- Destination element: &apos;FinalsOOPproj/src/Program&apos;&#x0D;&#x0A;- Original element: &apos;Program.Excersise_Schedule_Generator.java&apos;" description="Copy compilation unit" destination="=FinalsOOPproj/src&lt;Program" element1="/src&lt;Program{Excersise_Schedule_Generator.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1715047633601" units="1" version="1.0"/>
+</session>

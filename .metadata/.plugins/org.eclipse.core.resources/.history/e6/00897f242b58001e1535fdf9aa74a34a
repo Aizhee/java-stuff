@@ -1,0 +1,17 @@
+package Program;
+
+//First Program
+public class MyFirstProgram 
+	{
+	public static void main(String[] args) 
+			{
+		System.out.println();
+		System.out.println("Welcome to Programming World!");
+		System.out.println();
+		System.out.println("Programming is fun");
+		System.out.println();
+		System.out.println("Java is more fun.");
+		System.out.println();
+		System.out.println("Try Java now.");
+			}	
+	}

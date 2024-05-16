@@ -1,0 +1,20 @@
+package Program;
+
+//First Program
+public class MyFirstProgram 
+	{
+	public static void main(String[] args) 
+			{
+		System.out.println("Hello, world\"\n\t\'\\");
+		System.out.println();
+		System.out.println("I am taking CPE02.");
+		System.out.println();
+		System.out.println("I hope it is a lot of fun");
+		System.out.println();
+		System.out.println();
+		System.out.println("The teacher is named Donna.");
+		System.out.println();		
+		System.out.println();
+		System.out.println("I hope she give me a grade of 1.0!");
+			}	
+	}

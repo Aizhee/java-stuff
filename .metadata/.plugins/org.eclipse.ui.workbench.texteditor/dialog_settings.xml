@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="casesensitive" value="true"/>
+		<item key="wholeword" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<item key="selection" value="Activity18"/>
+		<list key="findhistory">
+			<item value="sepa"/>
+			<item value="for"/>
+			<item value="ColorToggleButtons"/>
+			<item value="bitshift"/>
+			<item value="scr"/>
+			<item value="buttonBitShft"/>
+			<item value="menuComponent"/>
+			<item value="25"/>
+		</list>
+		<list key="replacehistory">
+			<item value="Activity18"/>
+			<item value="15"/>
+			<item value="FileCopier"/>
+			<item value="►"/>
+		</list>
+	</section>
+</section>

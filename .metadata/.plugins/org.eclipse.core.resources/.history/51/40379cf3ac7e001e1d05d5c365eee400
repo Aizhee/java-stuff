@@ -1,0 +1,17 @@
+package Program;
+class MyFirstProgram
+{
+	
+	public static void main(String[] args) {
+		for (int row=1; row<=10;row++)
+		{
+			for (int column=10; column>=10;column--)
+			{
+				System.out.print(column*row + "\t");
+			}
+			System.out.println();
+		}
+	}
+	
+
+}

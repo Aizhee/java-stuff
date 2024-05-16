@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move package &apos;trigcalculator&apos; to &apos;javaProject/src&apos;&#x0D;&#x0A;- Original project: &apos;cherriejava&apos;&#x0D;&#x0A;- Destination element: &apos;javaProject/src&apos;&#x0D;&#x0A;- Original element: &apos;cherriejava/src/trigcalculator&apos;&#x0D;&#x0A;- Update references to refactored element" description="Move package" destination="=javaProject/src" element1="/src&lt;trigcalculator" flags="589830" fragments="1" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.movePackages" stamp="1714215171377" version="1.0"/>
+</session>
