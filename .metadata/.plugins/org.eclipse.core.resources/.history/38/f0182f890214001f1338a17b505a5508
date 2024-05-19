@@ -1,0 +1,9 @@
+package act15;
+
+public class Colors {
+
+	public Colors() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

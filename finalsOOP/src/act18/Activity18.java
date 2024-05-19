@@ -4,9 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+/*
+ * Aizhar Jamilano
+ * BSCpE II - GF | CPE05 - OOP
+ * 
+ * Activity 18: JToggleButton
+ * 
+ */
 
 public class Activity18 extends JFrame implements ActionListener {
-    private JToggleButton redButton, blueButton, greenButton;
+	private static final long serialVersionUID = 1L;//to remove the warning
+	private JToggleButton redButton, blueButton, greenButton;
     private JPanel display;
 
     public Activity18() {
@@ -14,13 +22,13 @@ public class Activity18 extends JFrame implements ActionListener {
         setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        // Create the panel for buttons
+        // Panel for buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(50, 40, 50, 40));
         setLayout(new GridLayout(1, 2));
        
-        // Create the display panel
+        // Display panel
         display = new JPanel();
         display.setBackground(new Color(0, 0, 0));
         
@@ -30,23 +38,23 @@ public class Activity18 extends JFrame implements ActionListener {
         displayOuter.setBorder(BorderFactory.createEmptyBorder(15, 5, 15, 5));
 
 
-        // Create and add buttons to the panel
+        // Add red button to the panel
         redButton = new JToggleButton("   red    ");
         redButton.addActionListener(this);
         redButton.setFont(new Font(null, Font.BOLD, 15));
         buttonPanel.add(redButton);
-
+        // Add green button to the panel
         greenButton = new JToggleButton(" green ");
         greenButton.addActionListener(this);
         greenButton.setFont(new Font(null, Font.BOLD, 15));
         buttonPanel.add(greenButton);
-
+        // Add blue button to the panel
         blueButton = new JToggleButton("  blue   ");
         blueButton.addActionListener(this);
         blueButton.setFont(new Font(null, Font.BOLD, 15));
         buttonPanel.add(blueButton);
 
-        // Ensure buttons have the same size
+        // Preserve the size of the buttons
         redButton.setMaximumSize(greenButton.getMaximumSize());
         blueButton.setMaximumSize(greenButton.getMaximumSize());
 
@@ -64,19 +72,19 @@ public class Activity18 extends JFrame implements ActionListener {
         int blue = color.getBlue();
 
         // Determine which button was toggled and update the corresponding color value
-        if (e.getSource() == redButton) {
+        if (e.getActionCommand() == "   red    ") {
             if (redButton.isSelected()) {
                 red = 255;
             } else {
                 red = 0;
             }
-        } else if (e.getSource() == greenButton) {
+        } else if (e.getActionCommand() == " green ") {
             if (greenButton.isSelected()) {
                 green = 255;
             } else {
                 green = 0;
             }
-        } else if (e.getSource() == blueButton) {
+        } else if (e.getActionCommand() == "  blue   ") {
             if (blueButton.isSelected()) {
                 blue = 255;
             } else {
@@ -88,7 +96,7 @@ public class Activity18 extends JFrame implements ActionListener {
         Color setCol = new Color(red, green, blue);
         display.setBackground(setCol);
     }
-
+    // Main method
     public static void main(String[] args) {
             Activity18 frame = new Activity18();
             frame.setVisible(true);

@@ -1,0 +1,10 @@
+package act16;
+
+import java.awt.Color;
+// Custom colors constants
+public class Colors {
+	public final Color PRIMARY = new Color(0,10,37,255);
+	public final Color SECONDARY = new Color(26,32,45,255);
+	public final Color FOREGROUND= new Color(169,171,176,255);
+	
+}

@@ -2,31 +2,37 @@ package act17;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicButtonUI;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-import javax.swing.plaf.basic.ComboPopup;
-
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-public class Act17and14 {
+/*
+ * Aizhar Jamilano
+ * BSCpE II - GF | CPE05 - OOP
+ * 
+ * Activity 17: Java Event and ActionListener
+ * 
+ * Binary Bitwise Calculator
+ * 
+ * It performs bitwise operations on two binary numbers
+ * It can perform AND, OR, NOT, NAND, NOR, XOR, Shift Left, Shift Right operations
+ * It can also perform bit shift operations
+ * 
+ */
+public class Act17and14 extends MainCalculator{
 
     private JTextArea title;
     private StringBuilder currentExpression = new StringBuilder();
     private JComboBox<String> bitShft;
 
     public Act17and14() {
+    	
         JButton[] buttons;
         // Button labels
         String[] buttonLabels = {"AND", "OR", "NOT", ">>", "NAND", "NOR", "XOR", "<<", "1", "0", "CE", "⌫"};
         // Tool tip texts
-        String[] toolTipTexts = {"And (Alt + A)", "Or (Alt + O)", "Not (Alt + N)", "Shift Left (Alt + LEFT_ARROW)", "Not And (Alt + D)", "Not Or (Alt + R)", "Exclusive Or (Alt + X)", "Shift Right (Alt + RIGHT_ARROW)", "One", "Zero", "Clear", "Back Space"};
+        String[] toolTipTexts = {"And (Alt + A)", "Or (Alt + O)", "Not (Alt + N)", "Shift Left (Alt + LEFT_ARROW)", "Not And (Alt + D)", "Not Or (Alt + R)", "Exclusive Or (Alt + X)", "Shift Right (Alt + RIGHT_ARROW)", "One", "Zero", "Clear (Alt + DEL)", "Back Space (Alt + BACK_SPACE)"};
         // Button bit shift
         String[] buttonBitShft = {"Arithmetic", "Logical", "Rotate Circular Shift", "Rotate Through Carry Circular Shift"};
 
@@ -46,7 +52,7 @@ public class Act17and14 {
         title.setBackground(new Color(32, 32, 32));
         title.setEditable(false);
 
-     // Add KeyListener to JTextArea
+        // Add KeyListener to JTextArea
         title.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char keyChar = e.getKeyChar();
@@ -56,6 +62,7 @@ public class Act17and14 {
                 } else if (keyChar == '\b') { // Backspace key
                 	backspace();
                 } else if (keyChar == '\n') { // Enter key
+                	setMainCalculator(bitShft, title, currentExpression);
                     calculateExpression();
                 } else if (keyChar == 'b') { // B key
                     changeBitShift();
@@ -75,7 +82,7 @@ public class Act17and14 {
         scrollPaneTitle.setBorder(null);
         scrollPaneTitle.getHorizontalScrollBar().setBackground(new Color(32, 32, 32));
         scrollPaneTitle.getHorizontalScrollBar().setForeground(new Color(32, 32, 32));
-        scrollPaneTitle.getHorizontalScrollBar().setUI(new CustomScrollBarUIS());
+        scrollPaneTitle.getHorizontalScrollBar().setUI(new CustomRoundedScrollBarUI());
         scrollPaneTitle.getHorizontalScrollBar().setBorder(BorderFactory.createEmptyBorder());
         scrollPaneTitle.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 10));
         scrollPaneTitle.getHorizontalScrollBar().setUnitIncrement(16);
@@ -118,7 +125,7 @@ public class Act17and14 {
 
         for (int i = 0; i < buttonLabels.length; i++) {
             buttons[i] = new JButton(buttonLabels[i]);
-            buttons[i].setUI(new RoundedButtonUIS());
+            buttons[i].setUI(new RoundedButtonUI());
             buttons[i].setToolTipText(toolTipTexts[i]);
             buttons[i].setForeground(Color.WHITE);
             buttons[i].setBackground(new Color(40, 40, 40));
@@ -213,10 +220,11 @@ public class Act17and14 {
     
     private class CalculateButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+        	setMainCalculator(bitShft, title, currentExpression);
             calculateExpression();
         }
     }
-    
+    // Backspace method
     private void backspace() {
     String[] operators = {" AND ", " NAND ", " OR ", " NOR ", " NOT ", " XOR ", " << ", " >> ", "1", "0"};
 	String expression = currentExpression.toString();
@@ -234,189 +242,9 @@ public class Act17and14 {
 		bitShft.setSelectedIndex((bitShft.getSelectedIndex() + 1) % bitShft.getItemCount());
 	}
 
-    private void calculateExpression() {
-        String type = String.valueOf(bitShft.getSelectedItem());
-        String[] tokens = currentExpression.toString().split(" ");
-        if (tokens.length < 3) {
-            title.setText("Error: Invalid Expression");
-            return;
-        }
-
-        try {
-            int operand1 = Integer.parseInt(tokens[0], 2);
-            String operator = tokens[1];
-            int operand2 = Integer.parseInt(tokens[2], 2);
-            int result = 0;
-
-            switch (operator) {
-                case "AND":
-                    result = operand1 & operand2;
-                    break;
-                case "OR":
-                    result = operand1 | operand2;
-                    break;
-                case "NOT":
-                    result = ~operand1;
-                    break;
-                case "NAND":
-                    result = ~(operand1 & operand2);
-                    break;
-                case "NOR":
-                    result = ~(operand1 | operand2);
-                    break;
-                case "XOR":
-                    result = operand1 ^ operand2;
-                    break;
-                case ">>":
-                    result = bitShiftOperation(type, operand1, operand2, "Right");
-                    break;
-                case "<<":
-                    result = bitShiftOperation(type, operand1, operand2, "Left");
-                    break;
-            }
-
-            currentExpression.setLength(0);
-            currentExpression.append(Integer.toBinaryString(result));
-            title.setText(currentExpression.toString());
-
-        } catch (NumberFormatException ex) {
-            title.setText("Error: Invalid Number Format");
-        }
-    }
     
-    private int bitShiftOperation(String type, int op1, int op2, String leftorRight) {
-		        switch (type) {
-		            case "Logical":
-		                if (leftorRight.equals("Left")) {
-		                    return op1 << op2;
-		                } else {
-		                    return op1 >>> op2;
-		                }
-		            case "Arithmetic":
-		                if (leftorRight.equals("Left")) {
-		                    return op1 << op2;
-		                } else {
-		                    return op1 >> op2;
-		                }
-		            case "Rotate Circular Shift":
-		                if (leftorRight.equals("Left")) {
-		                    return (op1 << op2) | (op1 >>> (32 - op2));
-		                } else {
-		                    return (op1 >>> op2) | (op1 << (32 - op2));
-		                }
-		            case "Rotate Through Carry Circular Shift":
-		                if (leftorRight.equals("Left")) {
-		                    return ((op1 << op2) | (op1 >>> (32 - op2))) ^ (op1 >>> 31);
-		                } else {
-		                    return ((op1 >>> op2) | (op1 << (32 - op2))) ^ (op1 << 31);
-		                }
-		            default:
-		                title.setText("Invalid operation");
-		                return -1;
-		        }
-    }
 	
 }
 
-// CustomComboBoxUI.java
-class CustomComboBoxUI extends BasicComboBoxUI {
-    protected ComboPopup createPopup() {
-        return new BasicComboPopup(comboBox) {
-			private static final long serialVersionUID = 1L;
 
-            protected void configurePopup() {
-                super.configurePopup();
-                setOpaque(false);
-            }
-        };
-    }
 
-    protected JButton createArrowButton() {
-        JButton button = super.createArrowButton();
-        button.setBackground(new Color(50, 50, 50));
-        button.setBorder(BorderFactory.createLineBorder(new Color(32,32,32), 2));
-        return button;
-    }
-
-	public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(new Color(50, 50, 50));
-        g2.fill(new RoundRectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height, 5, 5));
-        g2.dispose();
-    }
-}
-
-// Custom Rounded Button UI
-class RoundedButtonUIS extends BasicButtonUI {
-
-    private static final int ARC_WIDTH = 15;
-    private static final int ARC_HEIGHT = 15;
-    private static final float LIGHTEN_FACTOR = 0.3f; 
-
-    public void installUI(JComponent c) {
-        super.installUI(c);
-        AbstractButton button = (AbstractButton) c;
-        button.setOpaque(false);
-        button.setBorderPainted(true);
-        button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
- 
-    }
-
-    public void paint(Graphics g, JComponent c) {
-        AbstractButton b = (AbstractButton) c;
-        paintBackground(g, b, b.getBackground(), b.getModel().isPressed());
-        super.paint(g, c);
-    }
-
-    private void paintBackground(Graphics g, JComponent c, Color bgColor, boolean isPressed) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setColor(isPressed ? lightenColor(bgColor) : bgColor);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        int width = c.getWidth();
-        int height = c.getHeight();
-        g2d.fill(new RoundRectangle2D.Double(0, 0, width - 1, height - 1, ARC_WIDTH, ARC_HEIGHT));
-        g2d.dispose();
-    }
-
-    private Color lightenColor(Color color) {
-        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        return Color.getHSBColor(hsb[0], hsb[1], Math.min(1.0f, hsb[2] + LIGHTEN_FACTOR));
-    }
-}
-// Custom Scroll Bar UI
-class CustomScrollBarUIS extends BasicScrollBarUI {
-	private static final int ARC_WIDTH = 10;
-	private static final int ARC_HEIGHT = 10;
-
-	protected JButton createDecreaseButton(int orientation) {
-		return createArrowButton();
-	}
-
-	protected JButton createIncreaseButton(int orientation) {
-		return createArrowButton();
-	}
-
-	private JButton createArrowButton() {
-		JButton button = new JButton();
-		button.setOpaque(true);
-		button.setBackground(new Color(32, 32, 32));
-		button.setBorder(BorderFactory.createLineBorder(new Color(32, 32, 32), 2));
-		return button;
-	}
-
-	protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
-		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setColor(new Color(32, 32, 32));
-		g2d.fillRoundRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height, ARC_WIDTH, ARC_HEIGHT);
-		g2d.dispose();
-	}
-
-	protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setColor(new Color(50, 50, 50));
-		g2d.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, ARC_WIDTH, ARC_HEIGHT);
-		g2d.dispose();
-	}
-}

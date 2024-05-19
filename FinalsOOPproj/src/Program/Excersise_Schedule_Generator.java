@@ -116,7 +116,12 @@ public class Excersise_Schedule_Generator extends TimeTableMaker {
         * 		more non-consecutive days.
         * 		( https://www.who.int/publications-detail-redirect/9789240015128 )
         */
-       int minutesPerActivity = (int)(150/totalExcercises);
+		if (totalExcercises == 0) {
+			System.out.println("You are too weak to do any exercises! Please consult a doctor for advice.");
+			System.exit(0);
+			
+		} 
+		int minutesPerActivity = (int)(150/totalExcercises);
 		
       /* {String Arrays}
        * REFERENCE ON EXERCISES & DEFINITIONS
