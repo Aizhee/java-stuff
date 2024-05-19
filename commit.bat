@@ -1,17 +1,54 @@
 @echo off
-setlocal
+cd /d C:\Users\aizhar\eclipse-workspace
 
-git add .   :: Add all changes to the staging area
+:: Check if the directory change was successful
+if not "%cd%"=="C:\Users\aizhar\eclipse-workspace" (
+    echo Failed to change directory.
+    pause
+    exit /b 1
+)
+
+:: Add all changes to the staging area
+git add -A
+if errorlevel 1 (
+    echo git add failed
+    pause
+    exit /b 1
+)
 
 :: Prompt for commit message
 set /p commitMessage="Enter the commit message: "
 
-:: Git commands
-
+:: Commit changes
 git commit -m "%commitMessage%"
-git branch -M main
-git remote add origin https://github.com/Aizhee/java-stuff.git
-git push -u origin main
+if errorlevel 1 (
+    echo git commit failed
+    pause
+    exit /b 1
+)
 
-endlocal
+:: Rename the branch to 'main'
+git branch -M main
+if errorlevel 1 (
+    echo git branch rename failed
+    pause
+    exit /b 1
+)
+
+:: Add a remote repository named 'origin'
+git remote add origin https://github.com/Aizhee/java-stuff.git
+if errorlevel 1 (
+    echo git remote add failed
+    pause
+    exit /b 1
+)
+
+:: Push changes to the 'main' branch on the remote repository
+git push -u origin main
+if errorlevel 1 (
+    echo git push failed
+    pause
+    exit /b 1
+)
+
 pause
