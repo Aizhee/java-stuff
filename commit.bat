@@ -1,11 +1,32 @@
 @echo off
-cd /d C:\Users\aizhar\eclipse-workspace
 
-:: Check if the directory change was successful
-if not "%cd%"=="C:\Users\aizhar\eclipse-workspace" (
-    echo Failed to change directory.
-    pause
-    exit /b 1
+:: Navigate to the parent directory of the batch file
+cd /d .
+set parentDirectory=%CD%
+
+:: Define the batch file name
+set batchFileName=%~nx0
+
+:: Check if .gitignore already exists
+if exist "%parentDirectory%\.gitignore" (
+    echo .gitignore file already exists in the parent directory.
+) else (
+    :: Create a .gitignore file to ignore the batch file itself
+    echo %batchFileName% > "%parentDirectory%\.gitignore"
+    echo .gitignore file created in the parent directory to ignore the batch file.
+)
+
+:: Prompt user for the repository link if remote 'origin' does not exist
+git remote get-url origin >nul 2>&1
+if errorlevel 1 (
+    set /p repoLink="Enter the repository link: "
+    :: Add a remote repository named 'origin'
+    git remote add origin "%repoLink%"
+    if errorlevel 1 (
+        echo Failed to add remote repository 'origin'.
+        pause
+        exit /b 1
+    )
 )
 
 :: Add all changes to the staging area
@@ -33,20 +54,6 @@ if errorlevel 1 (
     echo git branch rename failed
     pause
     exit /b 1
-)
-
-:: Check if remote 'origin' already exists
-git remote get-url origin
-if not errorlevel 1 (
-    echo Remote 'origin' already exists, skipping 'git remote add'.
-) else (
-    :: Add a remote repository named 'origin'
-    git remote add origin https://github.com/Aizhee/java-stuff.git
-    if errorlevel 1 (
-        echo git remote add failed
-        pause
-        exit /b 1
-    )
 )
 
 :: Push changes to the 'main' branch on the remote repository
