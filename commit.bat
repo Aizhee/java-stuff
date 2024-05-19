@@ -35,12 +35,18 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: Add a remote repository named 'origin'
-git remote add origin https://github.com/Aizhee/java-stuff.git
-if errorlevel 1 (
-    echo git remote add failed
-    pause
-    exit /b 1
+:: Check if remote 'origin' already exists
+git remote get-url origin
+if not errorlevel 1 (
+    echo Remote 'origin' already exists, skipping 'git remote add'.
+) else (
+    :: Add a remote repository named 'origin'
+    git remote add origin https://github.com/Aizhee/java-stuff.git
+    if errorlevel 1 (
+        echo git remote add failed
+        pause
+        exit /b 1
+    )
 )
 
 :: Push changes to the 'main' branch on the remote repository
