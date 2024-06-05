@@ -1,0 +1,104 @@
+package Program;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+
+public class CreditGUI extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    CreditGUI frame = new CreditGUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the frame.
+     */
+    public CreditGUI() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\aizhar\\eclipse-workspace\\finalsOOP\\src\\actionLogo.png"));
+		setTitle("Exercisio");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        //make it full screen
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        // Create the content pane with a border layout
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(null);
+        setContentPane(contentPane);
+
+        // Create a panel for the background image
+        JPanel backgroundPanel = new JPanel(new BorderLayout()) {
+            private static final long serialVersionUID = 92L;
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon startImage = new ImageIcon("C:/Users/aizhar/Downloads/8722687.jpg");
+                Image img = startImage.getImage();
+                g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        };
+        backgroundPanel.setBackground(new Color(64, 128, 128));
+        backgroundPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        contentPane.add(backgroundPanel, BorderLayout.CENTER);
+
+        // Create a panel for the credits using GridLayout
+        JPanel creditsPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+        creditsPanel.setOpaque(false); // Make credits panel transparent
+        backgroundPanel.add(creditsPanel, BorderLayout.CENTER);
+
+        // Add credit information
+        JLabel titleLabel = new JLabel("Exersio - Exercise Routine Generator for Elderly People", JLabel.CENTER);
+        titleLabel.setFont(titleLabel.getFont().deriveFont(18.0f)); // Larger font for the title
+        titleLabel.setForeground(Color.BLACK); // Set text color to white for better visibility
+
+        JLabel developerLabel = new JLabel("Developed by: Aizhar Jamilano", JLabel.CENTER);
+        developerLabel.setForeground(Color.BLACK);
+
+        JLabel courseLabel = new JLabel("Course: BSCpE II-GF", JLabel.CENTER);
+        courseLabel.setForeground(Color.BLACK);
+
+        JLabel requirementLabel = new JLabel("Course Requirement for CPE05", JLabel.CENTER);
+        requirementLabel.setForeground(Color.BLACK);
+
+        // Add labels to the credits panel
+        creditsPanel.add(titleLabel);
+        creditsPanel.add(developerLabel);
+        creditsPanel.add(courseLabel);
+        creditsPanel.add(requirementLabel);
+
+        // Optionally, you can add a footer or any additional information
+        JLabel footerLabel = new JLabel("Thank you for using my application!", JLabel.CENTER);
+        footerLabel.setForeground(Color.BLACK);
+        creditsPanel.add(footerLabel);
+        
+        JButton back_btn = new JButton("Back");
+        creditsPanel.add(back_btn);
+    }
+}

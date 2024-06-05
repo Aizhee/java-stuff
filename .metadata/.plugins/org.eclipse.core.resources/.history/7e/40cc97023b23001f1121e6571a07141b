@@ -1,0 +1,602 @@
+package Program;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import java.awt.BorderLayout;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JSplitPane;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+import java.awt.Image;
+
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.JSlider;
+import java.awt.Dimension;
+import javax.swing.JSpinner;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.Panel;
+import java.awt.Component;
+import java.awt.Container;
+
+import javax.swing.border.EtchedBorder;
+import javax.swing.JTextField;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JTextPane;
+import javax.swing.SpinnerNumberModel;
+
+
+public class MainGUI extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private Color backgroundColor = new Color(32, 32, 32), 
+			textColor = new Color(255, 255, 255), 
+			foregroundColor = new Color(50, 50, 50);
+	public static JTextField username_input;
+	public static JLabel picture_profile, status = new JLabel("Next Exercise in: 1h2m"), imageGIF = new JLabel();
+	public static String profile_picture = "Exercises/th.jpg";
+	public static JSpinner txtStartHour, txtStartMinute, cycleCountIncrement_spinner;
+	public static JSlider endurance_slider, strength_slider, balance_slider, flexibility_slider;
+	public static JCheckBox chckbxNotify, chckbxRandomizeActivities, chckbxHidePastActivities, chckbxIncrementActivities, chckbxCycleCountIncrement;
+	public static DefaultListModel<String> listModel;
+	public static JProgressBar progressBar = new JProgressBar();
+	public static JList<String> list;
+	public static JTextArea descritption_container = new JTextArea();
+	public static int cycleCount = 0;
+	public static JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	public static boolean isNewUser = false;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainGUI frame = new MainGUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MainGUI() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("Exercises/actionLogo.png"));
+		setTitle("Exercisio");
+		setBackground(Color.BLACK);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//set size to full screen
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
+		setBounds(100, 100, 676, 417);
+		contentPane = new JPanel();
+		contentPane.setBorder(null);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		 // Create a panel for the background image
+        JPanel backgroundPanel = new JPanel(new BorderLayout()) {
+            private static final long serialVersionUID = 92L;
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon startImage = new ImageIcon("Exercises/8722687.jpg");
+                Image img = startImage.getImage();
+                g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        };
+        backgroundPanel.setBackground(new Color(64, 128, 128));
+        backgroundPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        contentPane.add(backgroundPanel, BorderLayout.CENTER);
+        
+        UIManager.put("TabbedPane.selected", backgroundColor);
+        //set unselected foreground color
+        
+        
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		//make the tab pane responsive and fill the whole window
+		tabbedPane.setBounds(0, 0, contentPane.getHeight(), contentPane.getWidth());
+		tabbedPane.setOpaque(false);
+		tabbedPane.setBorder(new EmptyBorder(0, 5, 5, 5));
+		tabbedPane.setFocusable(false);
+		backgroundPanel.add(tabbedPane, BorderLayout.CENTER);
+		//remove default outline border of the tabbed pane container
+		Insets insets = UIManager.getInsets("TabbedPane.contentBorderInsets");
+        insets.top = -1;
+        insets.bottom = -1;
+        insets.left = -1;
+        insets.right = -1;
+        UIManager.put("TabbedPane.contentBorderInsets", insets);
+		
+        
+		JPanel Schedule = new JPanel();
+		//scale the icon to fit the tab
+		ImageIcon icon = new ImageIcon("Exercises/handouts.png");
+		Image img = icon.getImage();
+		Image newimg = img.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+		tabbedPane.addTab("Schedule", new ImageIcon(newimg), Schedule, null);
+		Schedule.setLayout(new BorderLayout(0, 0));
+	
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setDividerSize(5);
+		splitPane.setUI(new CustomSplitPaneUI());
+		Schedule.add(splitPane);
+		splitPane.setResizeWeight(0.0);
+		
+		addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                splitPane.setDividerLocation(splitPane.getWidth() - splitPane.getDividerSize()*100);
+            }
+        });
+		
+		listModel = new DefaultListModel<>();
+        
+		
+        list = new JList<>(listModel);
+        list.setFixedCellHeight(50); 
+        list.setBorder(new EmptyBorder(10, 10, 10, 10));
+		list.setCellRenderer(new RoundedCellRenderer());
+		//show the content of the selected exercise
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (list.getSelectedValue() != null)
+					TimeTableMaker.LoadFileContentToTextArea(list.getSelectedValue());
+					TimeTableMaker.LoadGif(list.getSelectedValue());
+			}
+		});
+		splitPane.setLeftComponent(list);
+		
+		JPanel button_panel_1 = new JPanel();
+		button_panel_1.setBorder(new EmptyBorder(20, 30, 20, 30));
+		//change the left and right border relative to the window size
+		Schedule.addComponentListener(new java.awt.event.ComponentAdapter() {
+			public void componentResized(java.awt.event.ComponentEvent evt) {
+				button_panel_1.setBorder(
+						new EmptyBorder(20, (int) (((getWidth())) - 650), 20, 50));
+			}
+		});
+		
+		descritption_container.setWrapStyleWord(true);
+		descritption_container.setLineWrap(true);
+		descritption_container.setForeground(Color.WHITE);
+		descritption_container.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		descritption_container.setEditable(false);
+		descritption_container.setBorder(new EmptyBorder(10, 10, 10, 10));
+		descritption_container.setBackground(new Color(32, 32, 32));
+		
+		JScrollPane scrollPane = new JScrollPane(descritption_container);
+		scrollPane.setViewportBorder(null);
+		scrollPane.setBorder(null);
+		
+		scrollPane.getVerticalScrollBar().setUI(new CustomRoundedScrollBarUI());
+		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0));
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		
+		//hide the horizontal scroll bar
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		imageGIF.setHorizontalAlignment(SwingConstants.CENTER);
+		ImageIcon iconGIF = new ImageIcon("Exercises/rest.gif");
+		imageGIF.setIcon(iconGIF);
+		
+		//set the initial position of the split pane divider so its the same size as the image
+		splitPane.setDividerLocation(0);
+		
+		JPanel textnimage = new JPanel();
+		textnimage.setLayout(new BorderLayout(0, 0));
+		textnimage.add(imageGIF, BorderLayout.NORTH);
+		textnimage.add(scrollPane, BorderLayout.CENTER);
+
+		splitPane.setRightComponent(textnimage);
+
+
+		Schedule.add(button_panel_1, BorderLayout.SOUTH);
+		button_panel_1.setLayout(new GridLayout(1, 0, 20, 20));
+		
+		JButton regenerate_btn_1_1 = new JButton("Regenerate");
+		regenerate_btn_1_1.setVerticalAlignment(SwingConstants.BOTTOM);
+		regenerate_btn_1_1.setMnemonic('R');
+		regenerate_btn_1_1.setToolTipText("Regenerate Routine");
+		regenerate_btn_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				listModel.removeAllElements();
+				Exercisio.startGenerator();
+				TimeTableMaker.LoadFilesIntoGUI();
+			}
+		});
+		button_panel_1.add(regenerate_btn_1_1);
+		
+		JButton cancel_btn_1 = new JButton("Back");
+		cancel_btn_1.setToolTipText("Go Back to Splash Screen");
+		cancel_btn_1.setMnemonic('B');
+		cancel_btn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				IntroGUI intro = new IntroGUI();
+				intro.setVisible(true);
+				
+				dispose();
+			}
+		});
+		button_panel_1.add(cancel_btn_1);
+		
+		JPanel top_panel = new JPanel();
+		top_panel.setBorder(null);
+		Schedule.add(top_panel, BorderLayout.NORTH);
+		top_panel.setLayout(new BorderLayout(0, 0));
+		
+		String greeting;
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("HH");
+		int hour = Integer.parseInt(dateFormat.format(date));
+		if (hour >= 0 && hour < 12) {
+			greeting = "Good morning, ";
+		} else if (hour >= 12 && hour < 16) {
+			greeting = "Good afternoon, ";
+		} else {
+			greeting = "Good evening, ";
+		}
+		
+		UserSettings.loadSettingsFromFile();
+		greeting += UserSettings.getUsername() + "!";
+		
+		JLabel greeting_lbl = new JLabel(greeting);
+
+		greeting_lbl.setIcon(new ImageIcon(new ImageIcon(UserSettings.getProfilePic()).getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT)));
+		greeting_lbl.setHorizontalAlignment(SwingConstants.CENTER);
+		//resize image to fit the label
+		
+		top_panel.add(greeting_lbl, BorderLayout.WEST);
+		
+		JLabel lblNewLabel_5 = new JLabel("10:30");
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		//update lblNewLabel_5 every second with current time
+		//use event listener to update the time
+		SimpleDateFormat dateFormaDsply = new SimpleDateFormat("HH:mm");
+		
+
+		top_panel.add(lblNewLabel_5, BorderLayout.CENTER);
+		top_panel.add(status, BorderLayout.EAST);
+		
+		progressBar.setBorder(null);
+		progressBar.setIndeterminate(true);
+		progressBar.setPreferredSize(new Dimension(0, 10));
+		progressBar.setUI(new RoundedProgressBarUI());
+		top_panel.add(progressBar, BorderLayout.SOUTH);
+		
+		JPanel Profile = new JPanel();
+		ImageIcon icon1 = new ImageIcon("Exercises/people.png");
+		Image img1 = icon1.getImage();
+		Image newimg1 = img1.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+		tabbedPane.addTab("Profile", new ImageIcon(newimg1), Profile, null);
+		Profile.setLayout(new BorderLayout(0, 0));	
+		
+		if (isNewUser)
+			tabbedPane.setSelectedIndex(1);
+		
+		
+		JPanel button_panel = new JPanel();
+		button_panel.setBorder(new EmptyBorder(20, 10, 20, 10));
+		//change the left and right border relative to the window size
+		Profile.addComponentListener(new java.awt.event.ComponentAdapter() {
+			public void componentResized(java.awt.event.ComponentEvent evt) {
+				button_panel.setBorder(new EmptyBorder(20, (int) (((getWidth())) - 650), 20, 50));
+			}
+		});
+		Profile.add(button_panel, BorderLayout.SOUTH);
+		button_panel.setLayout(new GridLayout(1, 0, 20, 20));
+		
+		JButton save_btn = new JButton("Save");
+		save_btn.setToolTipText("Save Settings");
+		save_btn.setMnemonic('S');
+		save_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				save();
+			}
+		});
+		button_panel.add(save_btn);
+		
+		JButton generate_btn = new JButton("Save & Generate");
+		generate_btn.setToolTipText("Save and Generate Routine");
+		generate_btn.setMnemonic('G');
+		generate_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				save();
+				listModel.removeAllElements();
+				Exercisio.startGenerator();
+				TimeTableMaker.LoadFilesIntoGUI();
+			}
+		});
+		button_panel.add(generate_btn);
+		
+		JButton cancel_btn = new JButton("Cancel");
+		cancel_btn.setToolTipText("Cancel Changes");
+		cancel_btn.setMnemonic('C');
+		cancel_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				UserSettings.loadSettingsFromFileToUi();
+				tabbedPane.setSelectedIndex(0);
+			}
+		});
+		
+		
+		button_panel.add(cancel_btn);
+		
+		JPanel content_profile = new JPanel();
+		//set empty border relative to the window size
+		content_profile.setBorder(new EmptyBorder(0, (int)(((getWidth())/2)-300), 0, (int)(((getWidth())/2)-300)));
+		
+		//on resize, adjust the border
+		Profile.addComponentListener(new java.awt.event.ComponentAdapter() {
+			public void componentResized(java.awt.event.ComponentEvent evt) {
+				content_profile.setBorder(
+						new EmptyBorder(0, (int) (((getWidth()) / 2) - 300), 0, (int) (((getWidth()) / 2) - 300)));
+			}
+		});
+		
+		content_profile.setLayout(new GridLayout(2, 1, 0, 0));
+		
+		JPanel time_and_user_panel = new JPanel();
+		time_and_user_panel.setBorder(new EmptyBorder(0, 50, 0, 50));
+		content_profile.add(time_and_user_panel);
+		time_and_user_panel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel time_form = new JPanel();
+		time_form.setBorder(new TitledBorder(null, "Time", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		time_and_user_panel.add(time_form, BorderLayout.SOUTH);
+		
+		JLabel start_time = new JLabel("Start Time:");
+		time_form.add(start_time);
+		
+		txtStartHour = new JSpinner();
+		txtStartHour.setModel(new SpinnerNumberModel(0, 0, 23, 1));
+		time_form.add(txtStartHour);
+		
+		JLabel lblNewLabel_4 = new JLabel(":");
+		time_form.add(lblNewLabel_4);
+		
+		txtStartMinute = new JSpinner();
+		txtStartMinute.setModel(new SpinnerNumberModel(0, 0, 59, 1));
+		time_form.add(txtStartMinute);
+		
+		JPanel user_panel = new JPanel();
+		user_panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "User", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		time_and_user_panel.add(user_panel);
+		user_panel.setLayout(new BorderLayout(0, 0));
+		
+		Panel user_picture_panel = new Panel();
+		user_panel.add(user_picture_panel);
+		user_picture_panel.setLayout(new BorderLayout(0, 0));
+		
+		JButton change_pic_btn = new JButton("Change Picture");
+		change_pic_btn.setMnemonic('C');
+		change_pic_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png");
+				fileChooser.addChoosableFileFilter(filter);
+				int result = fileChooser.showSaveDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					String path = selectedFile.getAbsolutePath();
+					profile_picture = path;
+					picture_profile.setIcon(new ImageIcon(profile_picture));
+				}
+				// resize the image to fit the label
+				picture_profile.setIcon(new ImageIcon(new ImageIcon(profile_picture).getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT)));
+			}
+		});
+		user_picture_panel.add(change_pic_btn, BorderLayout.SOUTH);
+		
+		picture_profile = new JLabel("");
+		picture_profile.setHorizontalAlignment(SwingConstants.CENTER);
+		picture_profile.setIcon(new ImageIcon(new ImageIcon(UserSettings.getProfilePic()).getImage().getScaledInstance(250, 250, Image.SCALE_DEFAULT)));
+		picture_profile.setAlignmentX(Component.CENTER_ALIGNMENT);
+		user_picture_panel.add(picture_profile, BorderLayout.CENTER);
+		
+		Panel user_name_panel = new Panel();
+		user_panel.add(user_name_panel, BorderLayout.SOUTH);
+		
+		JLabel username = new JLabel("Username:");
+		user_name_panel.add(username);
+		
+		username_input = new JTextField();
+		user_name_panel.add(username_input);
+		username_input.setColumns(50);
+		
+		
+		JScrollPane scrollable_main = new JScrollPane(content_profile, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollable_main.setBorder(null);
+		scrollable_main.setViewportBorder(null);
+		scrollable_main.getVerticalScrollBar().setUnitIncrement(16);
+		scrollable_main.getVerticalScrollBar().setUI(new CustomRoundedScrollBarUI());
+		scrollable_main.getVerticalScrollBar().setBackground(backgroundColor);
+		scrollable_main.getVerticalScrollBar().setPreferredSize(new Dimension(10, 0));
+		Profile.add(scrollable_main, BorderLayout.CENTER);
+		
+		JPanel abilities_settings_panel = new JPanel();
+		abilities_settings_panel.setToolTipText("");
+		abilities_settings_panel.setBorder(new EmptyBorder(0, 50, 0, 50));
+		content_profile.add(abilities_settings_panel);
+		abilities_settings_panel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel abilities = new JPanel();
+		abilities.setToolTipText("");
+		abilities.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Abilities", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		abilities_settings_panel.add(abilities);
+		abilities.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel lblNewLabel_7 = new JLabel("Rate your Endurance: ");
+		abilities.add(lblNewLabel_7);
+		
+		endurance_slider = new JSlider();
+		endurance_slider.setValue(1);
+		endurance_slider.setSnapToTicks(true);
+		endurance_slider.setPaintTicks(true);
+		endurance_slider.setPaintLabels(true);
+		endurance_slider.setMinorTickSpacing(1);
+		endurance_slider.setMinimum(1);
+		endurance_slider.setMaximum(10);
+		endurance_slider.setMajorTickSpacing(9);
+		abilities.add(endurance_slider);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("Rate your Strength: ");
+		abilities.add(lblNewLabel_1_1);
+		
+		strength_slider = new JSlider();
+		strength_slider.setValue(1);
+		strength_slider.setSnapToTicks(true);
+		strength_slider.setPaintTicks(true);
+		strength_slider.setPaintLabels(true);
+		strength_slider.setMinorTickSpacing(1);
+		strength_slider.setMinimum(1);
+		strength_slider.setMaximum(10);
+		strength_slider.setMajorTickSpacing(9);
+		abilities.add(strength_slider);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Rate your Balance: ");
+		abilities.add(lblNewLabel_2_1);
+		
+		balance_slider = new JSlider();
+		balance_slider.setValue(1);
+		balance_slider.setSnapToTicks(true);
+		balance_slider.setPaintTicks(true);
+		balance_slider.setPaintLabels(true);
+		balance_slider.setMinorTickSpacing(1);
+		balance_slider.setMinimum(1);
+		balance_slider.setMaximum(10);
+		balance_slider.setMajorTickSpacing(9);
+		abilities.add(balance_slider);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("Rate your Flexibility: ");
+		abilities.add(lblNewLabel_3_1);
+		
+		flexibility_slider = new JSlider();
+		flexibility_slider.setValue(1);
+		flexibility_slider.setSnapToTicks(true);
+		flexibility_slider.setPaintTicks(true);
+		flexibility_slider.setPaintLabels(true);
+		flexibility_slider.setMinorTickSpacing(1);
+		flexibility_slider.setMinimum(1);
+		flexibility_slider.setMaximum(10);
+		flexibility_slider.setMajorTickSpacing(9);
+		abilities.add(flexibility_slider);
+		
+		JPanel Settings_1 = new JPanel();
+		Settings_1.setBorder(new TitledBorder(null, "Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		abilities_settings_panel.add(Settings_1, BorderLayout.SOUTH);
+		Settings_1.setLayout(new GridLayout(4, 1, 0, 0));
+		
+		chckbxNotify = new JCheckBox("Notify me for upcoming activities");
+		Settings_1.add(chckbxNotify);
+		
+		chckbxRandomizeActivities = new JCheckBox("Randomize Activities Each Day");
+		Settings_1.add(chckbxRandomizeActivities);
+		
+		chckbxHidePastActivities = new JCheckBox("Hide past Activities");
+		Settings_1.add(chckbxHidePastActivities);
+		
+		JPanel increment_abilities = new JPanel();
+		increment_abilities.setBorder(null);
+		Settings_1.add(increment_abilities);
+		increment_abilities.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
+		
+		chckbxIncrementActivities= new JCheckBox("Increment Abilities every");
+		chckbxIncrementActivities.setMnemonic('I');
+		chckbxIncrementActivities.setToolTipText("Increment abilities (Alt+A)");
+		increment_abilities.add(chckbxIncrementActivities);
+		
+		cycleCountIncrement_spinner = new JSpinner();
+		cycleCountIncrement_spinner.setModel(new SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+		increment_abilities.add(cycleCountIncrement_spinner);
+		
+		JLabel lblNewLabel = new JLabel("Cycle/s");
+		increment_abilities.add(lblNewLabel);
+		
+		CustomUIs.setColorsGlobally(contentPane, backgroundColor, textColor, foregroundColor);
+		button_panel.setBackground(foregroundColor);
+		button_panel_1.setBackground(foregroundColor);
+		//set child components background to the parent
+		Component[] components = button_panel.getComponents();
+		for (int i = 0; i < components.length; i++) {
+		    Component component = components[i];
+		    component.setBackground(foregroundColor);
+		}
+		Component[] components_1 = button_panel_1.getComponents();
+		for (int i = 0; i < components_1.length; i++) {
+		    Component component = components_1[i];
+		    component.setBackground(foregroundColor);
+		}
+
+		UserSettings.loadSettingsFromFileToUi();
+		TimeTableMaker.LoadFilesIntoGUI();
+		
+		//Periodically updated functions
+		Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                // Update the label with the current time
+                Date date = new Date();
+                lblNewLabel_5.setText(dateFormaDsply.format(date));
+                //update timed events
+                TimeTableMaker.LoadFilesIntoGUI();
+
+            }
+        }, 0, 60000);
+		
+	}
+	
+	private void save() {
+		UserSettings.getSettingsFromUI();
+		UserSettings.saveSettingsToFile();
+		UserSettings.loadSettingsFromFileToUi();
+		//restart the UI to apply changes
+		dispose();
+		MainGUI frame = new MainGUI();
+		frame.setVisible(true);
+	}
+	
+}

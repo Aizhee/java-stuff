@@ -1,0 +1,89 @@
+package Program;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+public class InstructionsGUI extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        try {
+            InstructionsGUI frame = new InstructionsGUI();
+            frame.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Create the frame.
+     */
+    public InstructionsGUI() {
+        setTitle("Exercisio Instructions");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new BorderLayout(0, 0));
+        setContentPane(contentPane);
+
+        JScrollPane scrollPane = new JScrollPane();
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+
+        JTextArea textArea = new JTextArea();
+        textArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
+        scrollPane.setViewportView(textArea);
+
+        String instructions = "Exercisio Instructions\n\n"
+                + "Getting Started\n\n"
+                + "1. Tap on Start\n"
+                + "   - Tap the 'Start' button to open the main schedule viewer and generator.\n\n"
+                + "Initial Setup (First-Time Users)\n\n"
+                + "2. Create Your Profile\n"
+                + "   - If this is your first time setting up, you will be prompted to create your profile.\n\n"
+                + "3. Add Your Username\n"
+                + "   - Enter your desired username in the provided field.\n\n"
+                + "4. Change Your Picture (Optional)\n"
+                + "   - Tap on the picture icon to upload or change your profile picture. This step is optional.\n\n"
+                + "5. Set Schedule Start Time\n"
+                + "   - Set the time you want to begin your generated schedule by selecting the appropriate time from the time picker.\n\n"
+                + "Rate Your Abilities\n\n"
+                + "6. Endurance\n"
+                + "   - Move the slider to rate your endurance level from 1 (lowest) to 10 (highest).\n\n"
+                + "7. Strength\n"
+                + "   - Move the slider to rate your strength level from 1 (lowest) to 10 (highest).\n\n"
+                + "8. Balance\n"
+                + "   - Move the slider to rate your balance level from 1 (lowest) to 10 (highest).\n\n"
+                + "9. Flexibility\n"
+                + "   - Move the slider to rate your flexibility level from 1 (lowest) to 10 (highest).\n\n"
+                + "Customize Your Settings\n\n"
+                + "10. Notification Settings\n"
+                + "    - Choose your preferences for receiving notifications. You can toggle notifications on or off and select how you wish to be notified.\n\n"
+                + "11. Randomization\n"
+                + "    - Enable or disable randomization for your schedule. This setting will determine whether activities are randomized.\n\n"
+                + "12. Hide Past Activities\n"
+                + "    - Select whether you want to hide past activities from your schedule view. Toggle this setting on or off based on your preference.\n\n"
+                + "13. Incrementation of Ratings\n"
+                + "    - Set the number of cycles after which your ratings will automatically increment. Define the amount and frequency of this incrementation.\n\n"
+                + "These steps should guide you through the setup and customization of your Exercisio program. Enjoy your workout planning!";
+        textArea.setText(instructions);
+    }
+}

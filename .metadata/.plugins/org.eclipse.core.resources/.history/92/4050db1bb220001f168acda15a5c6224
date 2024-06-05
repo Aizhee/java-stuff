@@ -1,0 +1,21 @@
+package Program;
+
+public class UserSettings extends MainGUI {
+	
+	private static String Username;
+	private static String ProfilePic;
+	private static int StartHour;
+	private static int StartMinute;
+	private static int EnduranceRate;
+	private static int StrengthRate;
+	private static int FlexibilityRate;
+	private static int BalanceRate;
+	private static Int ;
+	
+	
+	
+	public static void getSettingsFromUI() {
+	// Get settings from UI
+    
+	}
+}

@@ -1,0 +1,133 @@
+package Program;
+
+import java.awt.EventQueue;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JEditorPane;
+import javax.swing.border.EmptyBorder;
+
+public class InstructionsGUI extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    InstructionsGUI frame = new InstructionsGUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the frame.
+     */
+    public InstructionsGUI() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage("../FinalsOOPproj/Exercises/actionLogo.png"));
+        setTitle("Exercisio");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 600);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout(0, 0));
+
+        setContentPane(contentPane);
+
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setContentType("text/html");
+        editorPane.setText(getInstructions());
+        editorPane.setEditable(false);
+        editorPane.setMargin(new Insets(20, 50, 20, 20));
+
+
+        JScrollPane scrollPane = new JScrollPane(editorPane);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getVerticalScrollBar().setUI(new CustomRoundedScrollBarUI());
+        
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+        CustomUIs.setColorsGlobally(contentPane, new Color(64, 128, 128), Color.WHITE, Color.BLACK);
+    }
+
+    private String getInstructions() {
+        return "<html>"
+        		+ "<style>"
+                + "body { font-family: Arial, sans-serif; font-size: 20pt; }"
+                + "</style>"
+                + "<h1>Exercisio Instructions</h1>"
+                + "<h2>Getting Started</h2>"
+                + "<p><b>1. Tap on Start</b><br>"
+                + "   - Tap the 'Start' button to open the main schedule viewer and generator.</p>"
+                + "<img src='path_to_image/start.png' alt='Start Image'/>"
+                
+                + "<h2>Initial Setup (First-Time Users)</h2>"
+                + "<p><b>2. Create Your Profile</b><br>"
+                + "   - If this is your first time setting up, you will be prompted to create your profile.</p>"
+                + "<img src='path_to_image/create_profile.png' alt='Create Profile Image'/>"
+                
+                + "<p><b>3. Add Your Username</b><br>"
+                + "   - Enter your desired username in the provided field.</p>"
+                + "<img src='path_to_image/add_username.png' alt='Add Username Image'/>"
+                
+                + "<p><b>4. Change Your Picture (Optional)</b><br>"
+                + "   - Tap on the picture icon to upload or change your profile picture. This step is optional.</p>"
+                + "<img src='path_to_image/change_picture.png' alt='Change Picture Image'/>"
+                
+                + "<p><b>5. Set Schedule Start Time</b><br>"
+                + "   - Set the time you want to begin your generated schedule by selecting the appropriate time from the time picker.</p>"
+                + "<img src='path_to_image/set_time.png' alt='Set Time Image'/>"
+                
+                + "<h2>Rate Your Abilities</h2>"
+                + "<p><b>6. Endurance</b><br>"
+                + "   - Move the slider to rate your endurance level from 1 (lowest) to 10 (highest).</p>"
+                + "<img src='path_to_image/endurance.png' alt='Endurance Image'/>"
+                
+                + "<p><b>7. Strength</b><br>"
+                + "   - Move the slider to rate your strength level from 1 (lowest) to 10 (highest).</p>"
+                + "<img src='path_to_image/strength.png' alt='Strength Image'/>"
+                
+                + "<p><b>8. Balance</b><br>"
+                + "   - Move the slider to rate your balance level from 1 (lowest) to 10 (highest).</p>"
+                + "<img src='path_to_image/balance.png' alt='Balance Image'/>"
+                
+                + "<p><b>9. Flexibility</b><br>"
+                + "   - Move the slider to rate your flexibility level from 1 (lowest) to 10 (highest).</p>"
+                + "<img src='path_to_image/flexibility.png' alt='Flexibility Image'/>"
+                
+                + "<h2>Customize Your Settings</h2>"
+                + "<p><b>10. Notification Settings</b><br>"
+                + "    - Choose your preferences for receiving notifications. You can toggle notifications on or off and select how you wish to be notified.</p>"
+                + "<img src='path_to_image/notifications.png' alt='Notifications Image'/>"
+                
+                + "<p><b>11. Randomization</b><br>"
+                + "    - Enable or disable randomization for your schedule. This setting will determine whether activities are randomized.</p>"
+                + "<img src='path_to_image/randomization.png' alt='Randomization Image'/>"
+                
+                + "<p><b>12. Hide Past Activities</b><br>"
+                + "    - Select whether you want to hide past activities from your schedule view. Toggle this setting on or off based on your preference.</p>"
+                + "<img src='path_to_image/hide_past_activities.png' alt='Hide Past Activities Image'/>"
+                
+                + "<p><b>13. Incrementation of Ratings</b><br>"
+                + "    - Set the number of cycles after which your ratings will automatically increment. Define the amount and frequency of this incrementation.</p>"
+                + "<img src='path_to_image/incrementation.png' alt='Incrementation Image'/>"
+                
+                + "<p>These steps should guide you through the setup and customization of your Exercisio program. Enjoy your workout planning!</p>"
+                + "</html>";
+    }
+    
+   
+}

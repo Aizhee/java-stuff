@@ -1,0 +1,50 @@
+package act17;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+/*
+ * Aizhar Jamilano
+ * BSCpE II - GF | CPE05 - OOP
+ * 
+ * Activity 17: Java Event and ActionListener
+ * 
+ * Binary Bitwise Calculator
+ * 
+ * It performs bitwise operations on two binary numbers
+ * It can perform AND, OR, NOT, NAND, NOR, XOR, Shift Left, Shift Right operations
+ * It can also perform bit shift operations
+ * 
+ */
+public class Act17and14 extends MainCalculator{
+
+    private JTextArea title;
+    private StringBuilder currentExpression = new StringBuilder();
+    private JComboBox<String> bitShft;
+
+    public Act17and14() {
+    	
+        JButton[] buttons;
+        // Button labels
+        String[] buttonLabels = {"AND", "OR", "NOT", ">>", "NAND", "NOR", "XOR", "<<", "1", "0", "CE", "⌫"};
+        // Tool tip texts
+        String[] toolTipTexts = {"And (Alt + A)", "Or (Alt + O)", "Not (Alt + N)", "Shift Left (Alt + LEFT_ARROW)", "Not And (Alt + D)", "Not Or (Alt + R)", "Exclusive Or (Alt + X)", "Shift Right (Alt + RIGHT_ARROW)", "One", "Zero", "Clear (Alt + DEL)", "Back Space (Alt + BACK_SPACE)"};
+        // Button bit shift
+        String[] buttonBitShft = {"Arithmetic", "Logical", "Rotate Circular Shift", "Rotate Through Carry Circular Shift"};
+        
+        //creating instance of JFrame
+        JFrame frame = new JFrame("JFrameTitle");
+        //frame size 300 width and 300 height
+        frame.setSize(450, 400);
+        //center the frame
+        frame.setLocationRelativeTo(null);
+        //exit the application on close
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //make the frame visible
+        frame.setVisible(true);
+    }
+}
+
+
+

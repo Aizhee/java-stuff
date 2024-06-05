@@ -1,13 +1,7 @@
 package act17;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 // Custom Scroll Bar UI
 

@@ -1,7 +1,6 @@
 package act17;
 
-import javax.swing.JComboBox;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 public class MainCalculator {
 	private StringBuilder currentExpression = new StringBuilder();

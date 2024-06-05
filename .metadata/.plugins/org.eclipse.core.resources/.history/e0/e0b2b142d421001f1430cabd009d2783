@@ -1,0 +1,234 @@
+package Program;
+import java.util.Scanner;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class Exercisio extends MainGUI  {
+	//JAMILANO, Aizhar T.
+	//BSCpE II-GF
+	
+	/*
+	 *  MAIN METHOD
+	 */
+	public static int numberOfTimesRunned = 0;
+	
+	public static void startGenerator() {
+			numberOfTimesRunned++;
+			UserSettings.setNumberOfTimesRunned(numberOfTimesRunned);
+			//Get Values for rating abilities and time to start schedule using the user's inputs
+			int[] numberofExercises = inputRatingVariables();
+			int[] time = inputTimeVariables();
+			
+			UserSettings.loadSettingsFromFileToUi();
+			FileHandler fileHandler = new FileHandler();
+			fileHandler.deleteAllExercise();
+			generateExerciseSuggestions(numberofExercises, time);
+			
+	}
+	
+	
+	/*
+	 * METHODS
+	 */
+	
+	
+	// FOR INPUTING RATING OF THE ABILITIES OF THE USER
+	public static int[] inputRatingVariables() {
+		int[] numberofExercises = new int[4];// each slot representing the type of exercise
+		
+		//multiplied to 0.3 to make sure there is a maximum of 3 exercises per type
+		numberofExercises[0] = (int)(endurance_slider.getValue()*0.3);
+		numberofExercises[1] = (int)(strength_slider.getValue()*0.3);
+		numberofExercises[2] = (int)(balance_slider.getValue()*0.3);
+		numberofExercises[3] = (int)(flexibility_slider.getValue()*0.3);
+
+		
+		return numberofExercises;
+	}
+	
+	
+	// FOR INPUTTING THE START TIME OF THE SCHEDULE SUGGESTION
+	public static int[] inputTimeVariables() {
+		int[] time = new int[2];
+		
+		time[0] = (int) txtStartHour.getValue();
+		time[1] = (int) txtStartMinute.getValue();
+      
+		return time;
+	}
+	
+	// MAIN GENERATION OF EXERCISE SCHEDULE SUGGESTIONS
+	public static void generateExerciseSuggestions(int[] numberofExercises, int[] time) {
+		int hour_start = time[0];
+		int minute_start = time[1];
+		
+		FileHandler fileHandler = new FileHandler();
+		fileHandler.deleteAllExercise();
+		
+		//sum the total exercises
+		int totalExcercises = 0;
+       for (int var = 0; var<4; var++) {
+       	totalExcercises += numberofExercises[var];
+       }
+		
+       /* REFERENCE FOR USING 150 MINUTES TO DIVIDE TIME
+        * 	National Institute on Aging: At least 150 minutes of moderate-intensity aerobic activity
+        * 		(brisk walking, swimming, cycling) or 75 minutes of vigorous-intensity activity (jogging, running)
+        * 		per week, along with muscle-strengthening exercises for all major muscle groups at least 2 days per week.
+        * 		( https://www.nia.nih.gov/health/exercise-and-physical-activity )
+        *
+        * 	World Health Organization: At least 150 minutes of moderate-intensity aerobic activity or 75
+        * 		minutes of vigorous-intensity activity per week, plus muscle-strengthening exercises on 2 or
+        * 		more non-consecutive days.
+        * 		( https://www.who.int/publications-detail-redirect/9789240015128 )
+        */
+		if (totalExcercises == 0) {
+			Notifier.notifyWarning("You are too weak to do any exercises! Please consult a doctor for advice.");
+			
+		} 
+		int minutesPerActivity = (int)(150/totalExcercises);
+		
+      /* {String Arrays}
+       * REFERENCE ON EXERCISES & DEFINITIONS
+       * https://www.mayoclinic.org/healthy-lifestyle/fitness/basics/fitness-basics/hlv-20049447
+       * https://www.nia.nih.gov/health/exercise-and-physical-activity/four-types-exercise-can-improve-your-health-and-physical
+       */
+		//File exercises
+       //String array for enduranceExercises
+      
+       //String array for strengthExercises
+		
+		
+		//String array for balanceExercises
+		//Files inside balanceExercises to be read and selected from random file
+		
+		
+		//String array for flexibilityExercises
+		
+		
+		/*
+	     * {Outputs}
+	     */
+		
+		//Integer Array to store Time
+		int[] updatedTime = updateTime(hour_start, minute_start, 0);
+		
+		
+		//new FILEHANDLER object
+		FileHandler fh = new FileHandler();
+		
+		//Endurance Exercise Suggestions
+		for (int var1 = 0; var1 < numberofExercises[0]; var1++) {
+			if (var1==0) { //To ensure that the first iteration does not add any duration to the start
+			String time_endurance;
+
+			//Display staring time
+			time_endurance = "[ "+formatTime(updatedTime[0], updatedTime[1]) + " - ";
+			//Add the duration of the activity
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+			//Display ending time
+
+			time_endurance += formatTime(updatedTime[0], updatedTime[1]) + " ] ";
+			//Randomly Choose an exercise from index 0-8 of enduranceExercises Array
+			fh.copyToCurrent(fh.getFilePath("Exercises/endurance", randomizer(0,8)), time_endurance);
+			
+			} else if (var1>=0) { //To ensure that the 2nd iteration and so on add duration to the start	
+			
+			String time_endurance;
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30); //30 min break
+			//Display staring time
+			time_endurance =("[ "+formatTime(updatedTime[0], updatedTime[1]) + " - ");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_endurance += (formatTime(updatedTime[0], updatedTime[1]) + " ] ");
+		    //Randomly Choose an exercise from index 0-8 of enduranceExercises Array
+		    fh.copyToCurrent(fh.getFilePath("Exercises/endurance", randomizer(0,8)), time_endurance );
+	
+			}
+		}
+		
+		//Strength Exercise Suggestions
+		for (int var2 = 0; var2 < numberofExercises[1]; var2++) {
+			String time_strength;
+			//30 min break
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30);
+			//Display staring time
+			time_strength = ("[ "+formatTime(updatedTime[0], updatedTime[1]) + " - ");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_strength += (formatTime(updatedTime[0], updatedTime[1]) + " ] ");
+		    //Randomly Choose an exercise from index 0-9 of strengthExercises Array
+		    fh.copyToCurrent(fh.getFilePath("Exercises/strength", randomizer(0,9)), time_strength);
+
+		}
+		
+		//Balance Exercise Suggestions
+		for (int var3 = 0; var3 < numberofExercises[2]; var3++) {
+			
+			String time_balance;
+			//30 min break
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30);
+			//Display staring time
+			time_balance = ("[ "+formatTime(updatedTime[0], updatedTime[1]) + " - ");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_balance += (formatTime(updatedTime[0], updatedTime[1]) + " ] ");
+		    //Randomly Choose an exercise from index 0-9 of balanceExercises Array
+		    fh.copyToCurrent(fh.getFilePath("Exercises/balance", randomizer(0,9)), time_balance);
+
+		}
+		
+		//Flexibility Exercise Suggestions
+		for (int var4 = 0; var4 < numberofExercises[3]; var4++) {
+			String time_flexibility;
+			//30 min break
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30);
+			//Display staring time
+			time_flexibility = ("[ "+formatTime(updatedTime[0], updatedTime[1]) + " - ");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_flexibility += (formatTime(updatedTime[0], updatedTime[1]) + " ] ");
+		    //Randomly Choose an exercise from index 0-9 of flexibilityExercises 
+		    fh.copyToCurrent(fh.getFilePath("Exercises/flexibility", randomizer(0,9)), time_flexibility);
+		}
+	}
+	
+
+	//UPDATE TIME METHOD FOR ADDING MINUTES TO STARTING TIME
+	public static int[] updateTime(int hours, int minutes, int minutesToAdd) {
+	    // Calculate the total minutes by converting hours to minutes and adding the current minutes and additional minutes
+	    int totalMinutes = hours * 60 + minutes + minutesToAdd;
+	    // Calculate the updated hours by dividing totalMinutes by 60 (minutes in an hour)
+	    int updatedHours = totalMinutes / 60;
+	    // Calculate the updated minutes by taking the remainder after dividing totalMinutes by 60
+	    int updatedMinutes = totalMinutes % 60;
+	    // If the updated minutes exceed 60 (an hour), adjust the hours and minutes accordingly
+	    if (updatedMinutes >= 60) {
+	        updatedHours += updatedMinutes / 60; // Add the extra hours from the excess minutes
+	        updatedMinutes %= 60; // Update minutes to stay within the range (0-59)
+	    }
+	    // Ensure the updated hours remain within a 24-hour format
+	    updatedHours %= 24;
+	    // Return an array containing the updated hours and minutes
+	    return new int[]{updatedHours, updatedMinutes};
+	}
+  
+   //METHOD TO ENSURE CORRECT TIME FORMATTING OF ZEROS (00:00)
+   public static String formatTime(int hours, int minutes) {
+       return String.format("%d:%02d", hours, minutes);
+   }
+   			
+   //METHOD TO GENERATE RANDOM NUMBERS IN BETWEEN THE MIN AND MAX INPUTS
+   public static int randomizer(int min, int max) {
+       return (int)(Math.random() * (max - min + 1)) + min;
+   }
+
+  
+}

@@ -1,11 +1,7 @@
 package act15;
 
-import java.awt.Image;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import java.awt.*;
+import javax.swing.*;
 
 public class Designer extends Colors {
 	// overriding design method

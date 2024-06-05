@@ -4,4 +4,16 @@
 		<item key="x" value="919"/>
 		<item key="y" value="442"/>
 	</section>
+	<section name="org.eclipse.wb.internal.core.model.property.editor.string.StringPropertyDialog">
+		<item key="x" value="610"/>
+		<item key="y" value="290"/>
+		<item key="width" value="700"/>
+		<item key="height" value="440"/>
+	</section>
+	<section name="org.eclipse.wb.internal.core.model.property.order.ReorderDialog">
+		<item key="x" value="619"/>
+		<item key="y" value="273"/>
+		<item key="width" value="682"/>
+		<item key="height" value="473"/>
+	</section>
 </section>

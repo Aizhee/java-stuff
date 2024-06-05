@@ -1,0 +1,44 @@
+package Program;
+
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+// Custom Scroll Bar UI
+
+public class CustomRoundedScrollBarUI extends BasicScrollBarUI {
+	private static final int ARC_WIDTH = 10;
+	private static final int ARC_HEIGHT = 10;
+
+
+	@Override
+    protected JButton createDecreaseButton(int orientation) {
+        return createZeroButton();
+    }
+
+    @Override    
+    protected JButton createIncreaseButton(int orientation) {
+        return createZeroButton();
+    }
+
+    private JButton createZeroButton() {
+        JButton jbutton = new JButton();
+        jbutton.setPreferredSize(new Dimension(0, 0));
+        jbutton.setMinimumSize(new Dimension(0, 0));
+        jbutton.setMaximumSize(new Dimension(0, 0));
+        return jbutton;
+    }
+
+	protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setColor(new Color(32, 32, 32));
+		g2d.fillRoundRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height, ARC_WIDTH, ARC_HEIGHT);
+		g2d.dispose();
+	}
+
+	protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setColor(new Color(50, 50, 50));
+		g2d.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, ARC_WIDTH, ARC_HEIGHT);
+		g2d.dispose();
+	}
+}

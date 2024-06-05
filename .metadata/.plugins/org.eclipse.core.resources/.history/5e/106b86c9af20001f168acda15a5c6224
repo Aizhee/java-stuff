@@ -1,0 +1,45 @@
+package Program;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+
+public class FileHandler extends Notifier{
+
+	// Check if file exists
+	public boolean checkFile(String path) {
+		return new File(path).exists();
+	}
+	
+	// Read file
+	public String readFile(String path) {
+		String data = "";
+		try {
+			File file = new File(path);
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				data = scanner.nextLine();
+			}
+			scanner.close();
+		} catch (Exception e) {
+			notifyError("An error occurred." + e.getMessage());
+			e.printStackTrace();
+		}	
+		return data;
+	}
+	// Write to file
+	public void writeFile(String path, String content) {
+        try {
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
+            writer.println(content);
+            writer.close();
+
+            } catch (Exception e) {
+            	notifyError("An error occurred." + e.getMessage());
+            	e.printStackTrace();
+
+            }
+
+	}
+}

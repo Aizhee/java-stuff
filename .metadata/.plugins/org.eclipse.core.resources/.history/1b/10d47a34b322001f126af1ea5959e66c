@@ -1,0 +1,154 @@
+package Program;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.UIManager;
+import java.awt.Font;
+
+public class CreditGUI extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    CreditGUI frame = new CreditGUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public CreditGUI() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\aizhar\\eclipse-workspace\\finalsOOP\\src\\actionLogo.png"));
+        setTitle("Exercisio");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(null);
+
+        setContentPane(contentPane);
+
+        JPanel backgroundPanel = new JPanel() {
+            private static final long serialVersionUID = 12L;
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon startImage = new ImageIcon("C:/Users/aizhar/Downloads/8722687.jpg");
+                Image img = startImage.getImage();
+                g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        };
+        backgroundPanel.setBackground(new Color(64, 128, 128));
+        backgroundPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        contentPane.add(backgroundPanel, BorderLayout.CENTER);
+
+        backgroundPanel.setLayout(new GridBagLayout());
+        
+        PanelRound panelRound = new PanelRound();
+        panelRound.setBackground(UIManager.getColor("Slider.focus"));
+        panelRound.setRoundTopLeft(15);
+        panelRound.setRoundTopRight(15);
+        panelRound.setRoundBottomLeft(15);
+        panelRound.setRoundBottomRight(15);
+        panelRound.setBorder(new EmptyBorder(50, 50, 50, 50));
+        panelRound.setPreferredSize(new Dimension(600, 400));  // Set preferred size
+        panelRound.setMaximumSize(new Dimension(500, 500));    // Set maximum size
+        panelRound.setMinimumSize(new Dimension(400, 300));    // Set minimum size
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        
+        backgroundPanel.add(panelRound, gbc);
+        panelRound.setLayout(new BorderLayout(0, 0));
+        
+       
+        // Add credit information using JLabel
+        JLabel titleLabel = new JLabel("Exersio - Exercise Routine Generator for Elderly People", JLabel.CENTER);
+        titleLabel.setFont(titleLabel.getFont().deriveFont(18.0f)); // Larger font for the title
+        titleLabel.setForeground(Color.BLACK);
+
+        JLabel developerLabel = new JLabel("Developed by: Aizhar Jamilano", JLabel.CENTER);
+        developerLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        developerLabel.setForeground(Color.BLACK);
+
+        JLabel courseLabel = new JLabel("Course: BSCpE II-GF", JLabel.CENTER);
+        courseLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        courseLabel.setForeground(Color.BLACK);
+
+        JLabel requirementLabel = new JLabel("This program is part of the Course Requirement for CPE05", JLabel.CENTER);
+        requirementLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        requirementLabel.setForeground(Color.BLACK);
+
+        JLabel footerLabel = new JLabel("Thank you for using my application!", JLabel.CENTER);
+        footerLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        footerLabel.setForeground(Color.BLACK);
+
+        JButton back_btn = new JButton("Back");
+        back_btn.addActionListener(e -> {
+            // Your back button action here
+            IntroGUI intro = new IntroGUI();
+            intro.setVisible(true);
+
+            dispose();
+        });
+         JPanel panel = new JPanel();
+         panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+         
+         panel.add(titleLabel);
+         panel.add(developerLabel);
+         panel.add(courseLabel);
+         panel.add(requirementLabel);
+         panel.add(footerLabel);
+         
+        panelRound.add(back_btn, BorderLayout.SOUTH);	
+         
+        panelRound.add(panel, BorderLayout.CENTER);
+        
+        CustomUIs.setColorsGlobally(contentPane, new Color(64, 128, 128), Color.WHITE, Color.BLACK);
+    }
+
+}

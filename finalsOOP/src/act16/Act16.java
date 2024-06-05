@@ -1,20 +1,13 @@
 package act16;
 
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.undo.UndoManager;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Scanner;
 /*
  * Aizhar Jamilano
  * BSCpE II - GF | CPE05 - OOP
@@ -539,6 +532,32 @@ public class Act16 {
         	zoomOut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, ActionEvent.CTRL_MASK));
         	restoreZoom.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0, ActionEvent.CTRL_MASK));
         	
+			import javax.swing.*;
+			import java.awt.event.ActionEvent;
+			import java.awt.event.ActionListener;
+			
+			public class AnonymousClassExample {
+			
+				public static void main(String[] args) {
+					JFrame frame = new JFrame("Anonymous Class Example");
+					JButton button = new JButton("Click Me");
+			
+					// Registering the ActionListener using an anonymous class
+					button.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							System.out.println("Button was clicked!");
+						}
+					});
+			
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.setSize(300, 200);
+					frame.setLayout(new java.awt.FlowLayout());
+					frame.add(button);
+					frame.setVisible(true);
+				}
+			}
+			
+
         	// Zoom In
 			zoomIn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

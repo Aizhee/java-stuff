@@ -1,0 +1,191 @@
+package Program;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import javax.swing.SwingConstants;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.UIManager;
+import java.awt.Font;
+
+public class IntroGUI extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    IntroGUI frame = new IntroGUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public IntroGUI() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage("Exercises/actionLogo.png"));
+        setTitle("Exercisio");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(null);
+
+        setContentPane(contentPane);
+        setUndecorated(true);
+
+        JPanel backgroundPanel = new JPanel() {
+            private static final long serialVersionUID = 12L;
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon startImage = new ImageIcon("Exercises/8722687.jpg");
+                Image img = startImage.getImage();
+                g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+            }
+        };
+        backgroundPanel.setBackground(new Color(64, 128, 128));
+        backgroundPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        contentPane.add(backgroundPanel, BorderLayout.CENTER);
+
+        backgroundPanel.setLayout(new GridBagLayout());
+        
+        PanelRound panelRound = new PanelRound();
+        panelRound.setBackground(UIManager.getColor("Slider.focus"));
+        panelRound.setRoundTopLeft(15);
+        panelRound.setRoundTopRight(15);
+        panelRound.setRoundBottomLeft(15);
+        panelRound.setRoundBottomRight(15);
+        panelRound.setBorder(new EmptyBorder(50, 50, 50, 50));
+        panelRound.setPreferredSize(new Dimension(400, 400));  // Set preferred size
+        panelRound.setMaximumSize(new Dimension(400, 500));    // Set maximum size
+        panelRound.setMinimumSize(new Dimension(400, 300));    // Set minimum size
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        
+        backgroundPanel.add(panelRound, gbc);
+        panelRound.setLayout(new BorderLayout(0, 0));
+        
+        JLabel lblNewLabel = new JLabel("Welcome to Exercisio!");
+        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panelRound.add(lblNewLabel, BorderLayout.NORTH);
+        
+        JLabel logo_img = new JLabel("");
+        logo_img.setHorizontalAlignment(SwingConstants.CENTER);
+        ImageIcon logo = new ImageIcon("Exercises/actionLogo.png");
+        logo = new ImageIcon(logo.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT));
+        logo_img.setIcon(logo);
+        panelRound.add(logo_img, BorderLayout.CENTER);
+        
+        JPanel btn_panel = new JPanel();
+        btn_panel.setBackground(panelRound.getBackground());
+        panelRound.add(btn_panel, BorderLayout.SOUTH);
+        btn_panel.setLayout(new BorderLayout(0, 0));
+        
+        JLabel lblNewLabel_1 = new JLabel("Your new exercise routine!");
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+        btn_panel.add(lblNewLabel_1, BorderLayout.NORTH);
+        
+        JPanel panel = new JPanel();
+        panel.setBackground(panelRound.getBackground());
+        btn_panel.add(panel);
+        
+        JButton start_btn = new JButton("Start");
+        start_btn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	
+            	//check first if there is usersettings.txt file
+            	FileHandler file = new FileHandler();
+            	if (!file.checkFileExists("Exercises/usersettings.txt")) {
+            		//set the tab to profile
+            		//create a default usersettings.txt file
+            		file.writeFile("Exercises/usersettings.txt", "Enter Your Name\nExercises/th.jpg\n1\n1\n1\n1\n1\n4\nfalse\nfalse\nfalse\nfalse\n3\n0");
+            		MainGUI.isNewUser = true;
+            		MainGUI exercise = new MainGUI();
+            		exercise.setVisible(true);
+            		
+            		
+            		dispose();
+            	} else {
+            	MainGUI exercise = new MainGUI();
+        		exercise.setVisible(true);
+                dispose();
+            	}
+            }
+        });
+        panel.add(start_btn);
+        
+        JButton instructions_btn = new JButton("Instructions");
+		instructions_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				InstructionsGUI instructions = new InstructionsGUI();
+				instructions.setVisible(true);
+				dispose();
+			}
+		});
+        panel.add(instructions_btn);
+        
+        JButton cretdits_btn = new JButton("Credits");
+        cretdits_btn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                CreditGUI credits = new CreditGUI();
+                credits.setVisible(true);
+                dispose();
+            }
+        });
+        panel.add(cretdits_btn);
+        
+        JButton exit_btn = new JButton("Exit");
+		exit_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		panel.add(exit_btn);
+        
+        CustomUIs.setColorsGlobally(contentPane, new Color(64, 128, 128), Color.WHITE, Color.BLACK);
+    }
+
+}

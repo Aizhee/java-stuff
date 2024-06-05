@@ -1,12 +1,9 @@
 package act17;
 
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 /*
  * Aizhar Jamilano
  * BSCpE II - GF | CPE05 - OOP
@@ -35,11 +32,19 @@ public class Act17and14 extends MainCalculator{
         String[] toolTipTexts = {"And (Alt + A)", "Or (Alt + O)", "Not (Alt + N)", "Shift Left (Alt + LEFT_ARROW)", "Not And (Alt + D)", "Not Or (Alt + R)", "Exclusive Or (Alt + X)", "Shift Right (Alt + RIGHT_ARROW)", "One", "Zero", "Clear (Alt + DEL)", "Back Space (Alt + BACK_SPACE)"};
         // Button bit shift
         String[] buttonBitShft = {"Arithmetic", "Logical", "Rotate Circular Shift", "Rotate Through Carry Circular Shift"};
+        
+        //creating instance of JFrame
+        JFrame frame = new JFrame("JFrameTitle");
+        //frame size 300 width and 300 height
+        frame.setSize(450, 400);
+        //center the frame
+        frame.setLocationRelativeTo(null);
+        //exit the application on close
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //make the frame visible
+        frame.setVisible(true);
+        
 
-        JFrame frame = new JFrame("Binary Bitwise Calculator");
-        frame.setLayout(new BorderLayout());
-        frame.setMinimumSize(new Dimension(490, 400));
-        frame.setBackground(new Color(32, 32, 32));
         frame.setIconImage(new ImageIcon("C:\\Users\\aizhar\\Downloads\\bitwise.png").getImage());
         
         // Create a JTextArea
@@ -185,11 +190,9 @@ public class Act17and14 extends MainCalculator{
         frame.setSize(450, 400);
         frame.setVisible(true);
     }
-
     public static void main(String[] args) {
         new Act17and14();
     }
-
     private class OperationButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
@@ -197,7 +200,6 @@ public class Act17and14 extends MainCalculator{
             title.setText(currentExpression.toString());
         }
     }
-
     private class NumberButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
@@ -205,7 +207,6 @@ public class Act17and14 extends MainCalculator{
             title.setText(currentExpression.toString());
         }
     }
-
     private class SpecialButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
@@ -217,7 +218,6 @@ public class Act17and14 extends MainCalculator{
             title.setText(currentExpression.toString());
         }
     }
-    
     private class CalculateButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
         	setMainCalculator(bitShft, title, currentExpression);
@@ -234,16 +234,11 @@ public class Act17and14 extends MainCalculator{
             currentExpression.setLength(currentExpression.length() - operator.length());
             break;
         }
-    }
-	}
-
+    }}
 	private void changeBitShift() {
 		//cycle through the bit shift types
 		bitShft.setSelectedIndex((bitShft.getSelectedIndex() + 1) % bitShft.getItemCount());
 	}
-
-    
-	
 }
 
 

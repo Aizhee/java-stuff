@@ -1,0 +1,48 @@
+package Program;
+
+public class UserSettings extends MainGUI {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3705913131416158542L;
+	private static String username = "";
+	private static String profilePic = "";
+	private static int startHour = 0;
+	private static int startMinute = 0;
+	private static int enduranceRate = 0;
+	private static int strengthRate = 0;
+	private static int balanceRate = 0;
+	private static int flexibilityRate = 0;
+	private static Boolean notify = false;
+	private static Boolean randomizeAct = false;
+	private static Boolean hidePastAct = false;
+	private static Boolean incrementAct = false;
+	private static Boolean cycleCountIncrmt = false;
+	
+	
+	public static void getSettingsFromUI() {
+	// Get settings from UI
+    username = username_input.getText();
+    profilePic = lblProfilePic.getIcon().toString();
+    startHour = Integer.parseInt(txtStartHour.getText());
+    startMinute = Integer.parseInt(txtStartMinute.getText());
+    enduranceRate = Integer.parseInt(txtEnduranceRate.getText());
+    strengthRate = Integer.parseInt(txtStrengthRate.getText());
+    balanceRate = Integer.parseInt(txtBalanceRate.getText());
+    flexibilityRate = Integer.parseInt(txtFlexibilityRate.getText());
+    notify = chckbxNotify.isSelected();
+    randomizeAct = chckbxRandomizeActivities.isSelected();
+    hidePastAct = chckbxHidePastActivities.isSelected();
+    incrementAct = chckbxIncrementActivities.isSelected();
+    cycleCountIncrmt = chckbxCycleCountIncrement.isSelected();
+	}
+	
+	public static void saveSettingsToFile() {
+		
+	}
+	
+	public static void loadSettingsFromFile() {
+
+	}
+}

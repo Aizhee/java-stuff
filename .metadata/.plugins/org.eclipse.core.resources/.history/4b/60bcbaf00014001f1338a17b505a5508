@@ -1,9 +1,0 @@
-package act15;
-
-public class CustomRoundedScrollBarUI {
-
-	public CustomRoundedScrollBarUI() {
-		// TODO Auto-generated constructor stub
-	}
-
-}

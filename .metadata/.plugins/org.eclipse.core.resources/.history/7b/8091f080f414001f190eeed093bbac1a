@@ -1,9 +1,0 @@
-package act15;
-
-public class Designer {
-
-	public Designer() {
-		// TODO Auto-generated constructor stub
-	}
-
-}

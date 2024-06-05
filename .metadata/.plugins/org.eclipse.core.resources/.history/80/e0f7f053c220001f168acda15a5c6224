@@ -1,0 +1,341 @@
+package Program;
+import java.util.Scanner;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class Exercisio extends MainGUI implements ActionListener {
+	//JAMILANO, Aizhar T.
+	//BSCpE II-GF
+	
+	/*
+	 *  MAIN METHOD
+	 */
+	public static void main(String[] args) {
+		char endindCommand;
+		//Main do-while
+		do {
+			//Output the Headers
+			outputHeaders();
+			
+			//Get Values for rating abilities and time to start schedule using the user's inputs
+			int[] numberofExercises = inputRatingVariables();
+			int[] time = inputTimeVariables();
+			
+			
+			//Generate Exercise suggestions do-while
+			do {
+				//Main Exercise suggestions Generator
+				generateExerciseSuggestions(numberofExercises, time);
+				
+				// Ending request
+				System.out.print("\nEnter g to regenerate another excersise schedule suggestion, x to exit the program, or r to rerun the program: ");
+				endindCommand = scannerValidationChar();
+				
+			} while (endindCommand =='g');
+			
+		} while (endindCommand == 'r');
+		
+		//Ending statement
+		outputLine('=');
+		System.out.println("\nThankyou for choosing Exercise Schedule Generator! \r\n"
+				+ "Remember, \"The journey of a thousand miles begins with a single step.\" - Lao Tzu");
+	}
+	
+	
+	/*
+	 * METHODS
+	 */
+	
+	// FOR OUTPUTING THE LOGO, HEADER, & INSTRUCTIONS
+	public static void outputHeaders() {
+		Scanner input = new Scanner(System.in);
+		outputLine('=');
+		System.out.println("    ______                    _              _____      __             __      __        \n   / ____/  _____  __________(_)_______     / ___/_____/ /_  ___  ____/ /_  __/ /__      \n  / __/ | |/_/ _ \\/ ___/ ___/ / ___/ _ \\    \\__ \\/ ___/ __ \\/ _ \\/ __  / / / / / _ \\     \n / /____>  </  __/ /  / /__/ (__  )  __/   ___/ / /__/ / / /  __/ /_/ / /_/ / /  __/     \n/_____/_/|_|\\___/_/   \\___/_/____/\\___/   /____/\\___/_/ /_/\\___/\\__,_/\\__,_/_/\\___/      \n  / ____/__  ____  ___  _________ _/ /_____  _____                                       \n / / __/ _ \\/ __ \\/ _ \\/ ___/ __ `/ __/ __ \\/ ___/                                       \n/ /_/ /  __/ / / /  __/ /  / /_/ / /_/ /_/ / /                                           \n\\____/\\___/_/ /_/\\___/_/   \\__,_/\\__/\\____/_/                                            \n                                                                                         ");
+		System.out.println("============================= Exercise Schedule Generator =============================");
+		System.out.println("\nThe \"Exercise Schedule Generator\" is a Java program crafting personalized \ndaily workout routines for elderly individuals, covering stretching, walking, yoga,\nand light aerobics with random durations from 10 to 30 minutes. It enhances \nsenior health, mobility, and well-being through tailored exercises, fostering engagement \nin regular physical activity.\n\nPress Enter to continue... ");
+		input.nextLine();
+		System.out.println("Great! now lets first check your abilities(rate from 1-10)\n");
+	}
+	
+	// FOR INPUTING RATING OF THE ABILITIES OF THE USER
+	public static int[] inputRatingVariables() {
+		int[] numberofExercises = new int[4];// each slot representing the type of exercise
+		
+		//multiplied to 0.3 to make sure there is a maximum of 3 exercises per type
+		System.out.print("Rate your Endurance: ");
+		numberofExercises[0] = (int)(scannerValidationInt(1,10)*0.3);
+		System.out.print("Rate your Strength: ");
+		numberofExercises[1] = (int)(scannerValidationInt(1,10)*0.3);
+		System.out.print("Rate your Balance: ");
+		numberofExercises[2] = (int)(scannerValidationInt(1,10)*0.3);
+		System.out.print("Rate your Flexibility: ");
+		numberofExercises[3] = (int)(scannerValidationInt(1,10)*0.3);
+		
+		System.out.print("\n");
+		outputLine('=');
+		
+		
+		return numberofExercises;
+	}
+	
+	
+	// FOR INPUTTING THE START TIME OF THE SCHEDULE SUGGESTION
+	public static int[] inputTimeVariables() {
+		int[] time = new int[2];
+		
+		System.out.println("\nWhat time would you be starting your routine?(24-hour format) ");
+		System.out.print("  ►Hour: ");
+		time[0] = scannerValidationInt(0,24);
+		System.out.print("  ►Minute: ");
+		time[1] = scannerValidationInt(0,59);
+		System.out.print("\n");
+		outputLine('=');
+      
+		return time;
+	}
+	
+	// MAIN GENERATION OF EXERCISE SCHEDULE SUGGESTIONS
+	public static void generateExerciseSuggestions(int[] numberofExercises, int[] time) {
+		int hour_start = time[0];
+		int minute_start = time[1];
+		
+		System.out.println("Your Exercise Schedule Suggestions for Today: ");
+		
+		//sum the total exercises
+		int totalExcercises = 0;
+       for (int var = 0; var<4; var++) {
+       	totalExcercises += numberofExercises[var];
+       }
+		
+       /* REFERENCE FOR USING 150 MINUTES TO DIVIDE TIME
+        * 	National Institute on Aging: At least 150 minutes of moderate-intensity aerobic activity
+        * 		(brisk walking, swimming, cycling) or 75 minutes of vigorous-intensity activity (jogging, running)
+        * 		per week, along with muscle-strengthening exercises for all major muscle groups at least 2 days per week.
+        * 		( https://www.nia.nih.gov/health/exercise-and-physical-activity )
+        *
+        * 	World Health Organization: At least 150 minutes of moderate-intensity aerobic activity or 75
+        * 		minutes of vigorous-intensity activity per week, plus muscle-strengthening exercises on 2 or
+        * 		more non-consecutive days.
+        * 		( https://www.who.int/publications-detail-redirect/9789240015128 )
+        */
+		if (totalExcercises == 0) {
+			System.out.println("You are too weak to do any exercises! Please consult a doctor for advice.");
+			System.exit(0);
+			
+		} 
+		int minutesPerActivity = (int)(150/totalExcercises);
+		System.out.println("minutesPerActivity: "+minutesPerActivity);
+		
+      /* {String Arrays}
+       * REFERENCE ON EXERCISES & DEFINITIONS
+       * https://www.mayoclinic.org/healthy-lifestyle/fitness/basics/fitness-basics/hlv-20049447
+       * https://www.nia.nih.gov/health/exercise-and-physical-activity/four-types-exercise-can-improve-your-health-and-physical
+       */
+		//File exercises
+       //String array for enduranceExercises
+      
+       //String array for strengthExercises
+		
+		
+		//String array for balanceExercises
+		//Files inside balanceExercises to be read and selected from random file
+		
+		
+		//String array for flexibilityExercises
+		
+		
+		/*
+	     * {Outputs}
+	     */
+		
+		//Integer Array to store Time
+		int[] updatedTime = updateTime(hour_start, minute_start, 0);
+		
+		//Table Header	
+		System.out.println();
+		outputLine('=');
+		System.out.print("|     Time\t|\t\t\t\tExercises\t\t\t     |\n");
+		outputLine('=');
+		
+		//new FILEHANDLER object
+		FileHandler fh = new FileHandler();
+		
+		//Endurance Exercise Suggestions
+		for (int var1 = 0; var1 < numberofExercises[0]; var1++) {
+			if (var1==0) { //To ensure that the first iteration does not add any duration to the start
+			String time_endurance="";
+
+			//Display staring time
+			time_endurance = "|  "+formatTime(updatedTime[0], updatedTime[1]) + "-";
+			//Add the duration of the activity
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+			//Display ending time
+
+			time_endurance += formatTime(updatedTime[0], updatedTime[1]) + "\t| ";
+			//Randomly Choose an exercise from index 0-8 of enduranceExercises Array
+			fh.copyToCurrent(fh.getFilePath("Exercises/endurance", randomizer(0,8)), time_endurance);
+			System.out.println("time_endurance: "+time_endurance);
+			} else if (var1>=0) { //To ensure that the 2nd iteration and so on add duration to the start	
+			
+			String time_endurance;
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30); //30 min break
+			//Display staring time
+			time_endurance =("|  "+formatTime(updatedTime[0], updatedTime[1]) + "-");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_endurance += (formatTime(updatedTime[0], updatedTime[1]) + "\t| ");
+		    //Randomly Choose an exercise from index 0-8 of enduranceExercises Array
+		    fh.copyToCurrent(fh.getFilePath("Exercises/endurance", randomizer(0,8)), time_endurance );
+		    outputLine('-');
+			}
+		}
+		
+		//Strength Exercise Suggestions
+		for (int var2 = 0; var2 < numberofExercises[1]; var2++) {
+			String time_strength;
+			//30 min break
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30);
+			//Display staring time
+			time_strength = ("|  "+formatTime(updatedTime[0], updatedTime[1]) + "-");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_strength += (formatTime(updatedTime[0], updatedTime[1]) + "\t| ");
+		    //Randomly Choose an exercise from index 0-9 of strengthExercises Array
+		    fh.copyToCurrent(fh.getFilePath("Exercises/strength", randomizer(0,9)), time_strength);
+		    outputLine('-');
+		}
+		
+		//Balance Exercise Suggestions
+		for (int var3 = 0; var3 < numberofExercises[2]; var3++) {
+			
+			String time_balance;
+			//30 min break
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30);
+			//Display staring time
+			time_balance = ("|  "+formatTime(updatedTime[0], updatedTime[1]) + "-");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_balance += (formatTime(updatedTime[0], updatedTime[1]) + "\t| ");
+		    //Randomly Choose an exercise from index 0-9 of balanceExercises Array
+		    fh.copyToCurrent(fh.getFilePath("Exercises/balance", randomizer(0,9)), time_balance);
+		    outputLine('-');
+		}
+		
+		//Flexibility Exercise Suggestions
+		for (int var4 = 0; var4 < numberofExercises[3]; var4++) {
+			String time_flexibility;
+			//30 min break
+			updatedTime = updateTime(updatedTime[0], updatedTime[1], 30);
+			//Display staring time
+			time_flexibility = ("|  "+formatTime(updatedTime[0], updatedTime[1]) + "-");
+			//Add the duration of the activity
+		    updatedTime = updateTime(updatedTime[0], updatedTime[1], minutesPerActivity);
+		    //Display ending time
+		    time_flexibility += (formatTime(updatedTime[0], updatedTime[1]) + "\t| ");
+		    //Randomly Choose an exercise from index 0-9 of flexibilityExercises 
+		    fh.copyToCurrent(fh.getFilePath("Exercises/flexibility", randomizer(0,9)), time_flexibility);
+		    outputLine('-');
+		}
+		//Display disclaimer
+		System.out.println("\nDISCLAIMER: Before starting, it's wise to chat with your doctor! This program is a friendly \r\n"
+				+ "suggestion, not a strict regime. So listen to your body, take breaks every 10-15 minutes, \r\n"
+				+ "and choose exercises that feel good. If you need a boost, consider a pro like a trainer. \r\n"
+				+ "Remember, start gentle, keep things safe, and if anything feels off, talk to your doctor. \r\n"
+				+ "\r\n"
+				+ "Now, let's move and enjoy the journey!");
+		
+		outputLine('=');
+	}
+
+	
+	//VALIDATE INPUT TYPE AND VALUES (INTEGER)
+	public static int scannerValidationInt(int min, int max) {
+       Scanner input = new Scanner(System.in);
+       int validInt;
+       while (true) {
+           if (input.hasNextInt()) {
+               validInt = input.nextInt();
+               if (validInt <= max && validInt >=min) {
+               break; // Break out of the loop if the input is an integer
+               } else {
+               	System.out.print("Invalid input. Please enter an integer in betweeen " + min +"-"+ max +": ");
+               }
+           } else {
+               System.out.print("Invalid input. Please enter an integer: ");
+           }
+          }
+         return validInt;
+   }
+	       
+	//VALIDATE INPUT TYPE AND VALUES (CHARACTER)
+   public static char scannerValidationChar() {
+       Scanner input = new Scanner(System.in);
+       char validChar;
+       while (true) {
+           String inputString = input.nextLine();
+           if (inputString.length() == 1) {
+               char inputChar = inputString.charAt(0);
+               if (inputChar == 'x' || inputChar == 'g' || inputChar == 'r') {
+               	validChar = inputChar;
+                   break; // Break out of the loop if the input is a valid character
+               } else {
+                   System.out.print("Invalid input. Please enter a valid character 'x', 'g', or 'r': ");
+               }
+           } else {
+               System.out.print("Invalid input. Please enter a single character: ");
+           }
+         }
+           return validChar;
+   }
+	
+	//PRINT HORIZONTAL LINES
+	public static void outputLine(char type) {
+       for (int i = 0; i < 86; i++) {
+           System.out.print(type);
+       }
+       System.out.println();
+   }
+	
+	//UPDATE TIME METHOD FOR ADDING MINUTES TO STARTING TIME
+	public static int[] updateTime(int hours, int minutes, int minutesToAdd) {
+	    // Calculate the total minutes by converting hours to minutes and adding the current minutes and additional minutes
+	    int totalMinutes = hours * 60 + minutes + minutesToAdd;
+	    // Calculate the updated hours by dividing totalMinutes by 60 (minutes in an hour)
+	    int updatedHours = totalMinutes / 60;
+	    // Calculate the updated minutes by taking the remainder after dividing totalMinutes by 60
+	    int updatedMinutes = totalMinutes % 60;
+	    // If the updated minutes exceed 60 (an hour), adjust the hours and minutes accordingly
+	    if (updatedMinutes >= 60) {
+	        updatedHours += updatedMinutes / 60; // Add the extra hours from the excess minutes
+	        updatedMinutes %= 60; // Update minutes to stay within the range (0-59)
+	    }
+	    // Ensure the updated hours remain within a 24-hour format
+	    updatedHours %= 24;
+	    // Return an array containing the updated hours and minutes
+	    return new int[]{updatedHours, updatedMinutes};
+	}
+  
+   //METHOD TO ENSURE CORRECT TIME FORMATTING OF ZEROS (00:00)
+   public static String formatTime(int hours, int minutes) {
+       return String.format("%d:%02d", hours, minutes);
+   }
+   			
+   //METHOD TO GENERATE RANDOM NUMBERS IN BETWEEN THE MIN AND MAX INPUTS
+   public static int randomizer(int min, int max) {
+       return (int)(Math.random() * (max - min + 1)) + min;
+   }
+
+
+@Override
+public void actionPerformed(ActionEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+  
+}

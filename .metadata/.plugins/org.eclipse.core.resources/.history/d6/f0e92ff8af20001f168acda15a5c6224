@@ -1,0 +1,26 @@
+package Program;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+public class Notifier {
+	
+	public ImageIcon icon = new ImageIcon("C:/Users/aizhar/eclipse-workspace/finalsOOP/src/actionLogo.png");
+
+	public static void notify(String message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
+	
+	public static void notifyError(String message) {
+		JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static void notifyWarning(String message) {
+		JOptionPane.showMessageDialog(null, message, "Warning", JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public static void notifyInfo(String message) {
+		JOptionPane.showMessageDialog(null, message, "Info", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+}

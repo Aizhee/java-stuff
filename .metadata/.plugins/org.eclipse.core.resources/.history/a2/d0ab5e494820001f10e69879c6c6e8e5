@@ -1,0 +1,68 @@
+package Program;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+public class CreditGUI extends JFrame {
+
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
+
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    CreditGUI frame = new CreditGUI();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * Create the frame.
+     */
+    public CreditGUI() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        
+        // Create the content pane with a border layout
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
+        setContentPane(contentPane);
+        
+        // Create a panel for the credits using GridLayout
+        JPanel creditsPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        contentPane.add(creditsPanel, BorderLayout.CENTER);
+        
+        // Add credit information
+        JLabel titleLabel = new JLabel("Exersio - Exercise Routine Generator for Elderly People", JLabel.CENTER);
+        titleLabel.setFont(titleLabel.getFont().deriveFont(18.0f)); // Larger font for the title
+        
+        JLabel developerLabel = new JLabel("Developed by: Aizhar Jamilano", JLabel.CENTER);
+        JLabel courseLabel = new JLabel("Course: BSCpE II-GF", JLabel.CENTER);
+        JLabel requirementLabel = new JLabel("Course Requirement for CPE05", JLabel.CENTER);
+        
+        // Add labels to the credits panel
+        creditsPanel.add(titleLabel);
+        creditsPanel.add(developerLabel);
+        creditsPanel.add(courseLabel);
+        creditsPanel.add(requirementLabel);
+        
+        // Optionally, you can add a footer or any additional information
+        JLabel footerLabel = new JLabel("Thank you for using our application!", JLabel.CENTER);
+        contentPane.add(footerLabel, BorderLayout.SOUTH);
+    }
+}
+

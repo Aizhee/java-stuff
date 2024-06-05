@@ -1,0 +1,302 @@
+package Program;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class TimeTableMaker extends MainGUI{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5026472084170013869L;
+	public static String[] start_act_time, end_act_time;  
+	//add to the files to item list
+	public static String path = "Exercises/current";
+	public static File folder = new File(path);
+	//arragnge files in alphabetical order
+		
+	
+	
+	
+	public static void LoadFilesIntoGUI() {
+		File[] files = folder.listFiles();	
+		String[] fileNames = new String[files.length];
+		start_act_time = new String[files.length];
+		end_act_time = new String[files.length];
+		for (int i = 0; i < files.length; i++) {
+			fileNames[i] = files[i].getName();
+		}
+		Arrays.sort(fileNames);
+		//add files to the list
+		for (int i = 0; i < fileNames.length; i++) {
+			String file = fileNames[fileNames.length - (i+1)];
+			listModel.addElement(file);
+			
+			// get start and end time of each activity from the file name
+			Pattern pattern = Pattern.compile("\\[\\s*(\\d+∶\\d+)\\s*-\\s*(\\d+∶\\d+)\\s*\\]");
+	        Matcher matcher = pattern.matcher(file);
+	        
+	        if (matcher.find()) {
+	        	start_act_time[i] = matcher.group(1).toString();
+	        	end_act_time[i] = matcher.group(2).toString();
+	        }
+			
+		}
+		
+		//select the file with the current time in range
+		String currentTime = new java.text.SimpleDateFormat("HH∶mm").format(new java.util.Date());
+		String[] time = currentTime.split("∶");
+		int currentHour = Integer.parseInt(time[0]);
+		int currentMinute = Integer.parseInt(time[1]);
+		int currentActivityIndex = -1;
+		
+		for (int i = 0; i < start_act_time.length; i++) {
+			String[] start_time = start_act_time[i].split("∶");
+			String[] end_time = end_act_time[i].split("∶");
+			int startHour = Integer.parseInt(start_time[0]);
+			int startMinute = Integer.parseInt(start_time[1]);
+			int endHour = Integer.parseInt(end_time[0]);
+			int endMinute = Integer.parseInt(end_time[1]);
+
+			if (currentHour > startHour && currentHour < endHour) {
+				//if current hour is between start and end hour select the file
+				list.setSelectedIndex(i);
+				LoadFileContentToTextArea(list.getSelectedValue());
+				currentActivityIndex = i;
+				System.out.println("Current hour is between start and end hour");
+			} else if (currentHour == endHour && currentMinute >= startMinute && currentMinute <= endMinute) {
+				//if current hour is equal to end hour and current minute is less than or equal to end minute select the file
+				//this is to handle the case where an activity is scheduled to end at the current time
+				list.setSelectedIndex(i);
+				LoadFileContentToTextArea(list.getSelectedValue());
+				currentActivityIndex = i;
+		        System.out.println("the current hour is equal to the end hour");
+			
+			} else {
+				// if there is no activity within the current time range set text to text area
+				// to no activity
+				// if at  the end of the list and still no activity is found
+				if (i == start_act_time.length - 1 && currentActivityIndex == -1) {
+					currentActivityIndex = -1;
+					//select nothing
+				    list.clearSelection();
+					status.setText("No activity at this time.");
+					progressBar.setIndeterminate(true);
+					descritption_container.setText("No activity at this time. Feel free to take a break, or select an activity from the list to view its description. Change the time to view activities scheduled for that time and generate if you want more.");
+				}
+				
+			}
+			
+		}
+		
+		// Check if there is a next activity
+		if (currentActivityIndex + 1 < start_act_time.length) {
+		    String[] next_start_time = start_act_time[currentActivityIndex + 1].split("∶");
+		    int next_startHour = Integer.parseInt(next_start_time[0]);
+		    int next_startMinute = Integer.parseInt(next_start_time[1]);
+		    
+		    // Print current and next activity times for debugging
+		    System.out.println("CurrentHour: " + currentHour + " Next start hour: " + next_startHour);
+		    System.out.println("CurrentMinute: " + currentMinute + " Next start minute: " + next_startMinute);
+
+		    // Calculate the time difference
+		    int currentTotalMinutes = currentHour * 60 + currentMinute;
+		    int nextTotalMinutes = next_startHour * 60 + next_startMinute;
+		    int minutesDifference = nextTotalMinutes - currentTotalMinutes;
+
+		    // Handle the case when the next activity is on the next day (e.g., current time is 23:50 and next activity is at 00:10)
+		    if (currentHour == 23 && next_startHour == 0 && next_startMinute >= 0) {
+		        int hours = 24 - currentHour + next_startHour;
+		        int minutes = next_startMinute - currentMinute;
+		        if (minutes < 0) {
+		            hours -= 1;
+		            minutes += 60;
+		        }
+				
+		        status.setText("Next activity starts in " + hours + " hours and " + minutes + " minutes.");
+		    
+		    } else if (minutesDifference > 0) {
+		        int minutes = minutesDifference % 60;
+		        
+		        status.setText("Next activity starts in " + minutes + " minutes.");
+		    } else if (currentHour == next_startHour && currentMinute < next_startMinute) {
+		        // If the current hour is equal to the next start hour and the current minute is less than the next start minute
+		        int minutes = next_startMinute - currentMinute;
+		       
+		        status.setText("Next activity starts in " + minutes + " minutes.");
+		    }
+		}
+
+		//check if there is currentlly an activity
+		if (currentActivityIndex != -1) {
+				// if current hour is equal to next start hour and current minute is greater
+				// than or equal to next start minute
+				LoadFileContentToTextArea(list.getSelectedValue());
+				status.setText("Current Activity: " + fileNames[currentActivityIndex].replaceAll("\\[.*\\]", "").trim());
+				UpdateProgressBar();
+		}
+		
+		if (UserSettings.getNotify()) {
+			// if notify is enabled notify user of the next activity
+			if (currentActivityIndex == -1)
+				NotifyUserOfNextActivity();
+		}
+		
+		//hide past activities if hide past activities is enabled
+		if (UserSettings.getHidePastAct()) {
+			HidePastActivities();
+		}
+		
+		//icrement ability if increment ability is enabled
+		if (UserSettings.getIncrementAct()) {
+			if (UserSettings.getNumberOfTimesRunned() > UserSettings.getCycleCountIncrmt() )
+			IncrementAbility();
+		}
+		
+		if (UserSettings.getRandomizeAct()) {
+			// if randomize activities is enabled
+			// randomize the activities
+			randomizeActivities();
+		}
+
+	}
+	
+	//set textarea with content of selected file
+	public static void LoadFileContentToTextArea(String selectedItem) {
+		FileHandler fileHandler = new FileHandler();
+		String path = "Exercises/current/" + selectedItem;
+		String content = fileHandler.readFile(path);
+		descritption_container.setText(content);
+	}
+	//method to update progress bar if an activity is selected and the time is within the range
+	//of the selected activity
+	public static void UpdateProgressBar() {
+		progressBar.setIndeterminate(false);
+		String currentTime = new java.text.SimpleDateFormat("HH∶mm").format(new java.util.Date());
+        String[] time = currentTime.split("∶");
+        int currentHour = Integer.parseInt(time[0]);
+        int currentMinute = Integer.parseInt(time[1]);
+        int currentSeconds = (currentHour * 60 * 60) + (currentMinute * 60);
+        
+        for (int i = 0; i < start_act_time.length; i++) {
+            String[] start_time = start_act_time[i].split("∶");
+            String[] end_time = end_act_time[i].split("∶");
+            int startHour = Integer.parseInt(start_time[0]);
+            int startMinute = Integer.parseInt(start_time[1]);
+            int startSeconds = (startHour * 60 * 60) + (startMinute * 60);
+            int endHour = Integer.parseInt(end_time[0]);
+            int endMinute = Integer.parseInt(end_time[1]);
+            int endSeconds = (endHour * 60 * 60) + (endMinute * 60);
+            
+            while (currentSeconds >= startSeconds && currentSeconds <= endSeconds) {
+                //if current time is within the range of the selected activity
+                //update progress bar update it periodically asynchronosly
+            	
+                int totalSeconds = endSeconds - startSeconds;
+                int currentTotalSeconds = currentSeconds - startSeconds;
+                int progress = (currentTotalSeconds * 100) / totalSeconds;
+                progressBar.setValue(progress);
+
+                //check if the activity is about to end
+				if (currentTotalSeconds == totalSeconds - 60) {
+					Notifier.notify("Activity ends in 1 minute.");
+				}
+				//check if the activity has ended
+				if (currentTotalSeconds == totalSeconds) {
+					//break;
+				}
+					
+					
+            }
+        }
+    }
+	//method to notify user of the next activity if the next activity is within the next 30 minutes
+	public static void NotifyUserOfNextActivity() {
+		String currentTime = new java.text.SimpleDateFormat("HH∶mm").format(new java.util.Date());
+		String[] time = currentTime.split("∶");
+		int currentHour = Integer.parseInt(time[0]);
+		int currentMinute = Integer.parseInt(time[1]);
+		int currentTotalSeconds = (currentHour * 60 * 60) + (currentMinute * 60);
+
+		for (int i = 0; i < start_act_time.length; i++) {
+			String[] start_time = start_act_time[i].split("∶");
+			String[] end_time = end_act_time[i].split("∶");
+			int startHour = Integer.parseInt(start_time[0]);
+			int startMinute = Integer.parseInt(start_time[1]);
+			int startSeconds = (startHour * 60 * 60) + (startMinute * 60);
+			int endHour = Integer.parseInt(end_time[0]);
+			int endMinute = Integer.parseInt(end_time[1]);
+			int endSeconds = (endHour * 60 * 60) + (endMinute * 60);
+
+			if (currentTotalSeconds >= startSeconds && currentTotalSeconds <= endSeconds) {
+				// if current time is within the range of the selected activity
+				// check if there is a next activity
+				if (i + 1 < start_act_time.length) {
+					String[] next_start_time = start_act_time[i + 1].split("∶");
+					int next_startHour = Integer.parseInt(next_start_time[0]);
+					int next_startMinute = Integer.parseInt(next_start_time[1]);
+					int next_startSeconds = (next_startHour * 60 * 60) + (next_startMinute * 60);
+
+					if (next_startSeconds - currentTotalSeconds <= 1800) {
+						// if the next activity is within the next 30 minutes
+						// notify the user
+						Notifier.notify("Next activity starts in " + (next_startSeconds - currentTotalSeconds) + " seconds.");
+					}
+				}
+			}
+		}
+	}
+	//method to hide past activities
+	public static void HidePastActivities() {
+	    File[] files = folder.listFiles();
+		String currentTime = new java.text.SimpleDateFormat("HH∶mm").format(new java.util.Date());
+	    String[] time = currentTime.split("∶");
+	    int currentHour = Integer.parseInt(time[0]);
+	    int currentMinute = Integer.parseInt(time[1]);
+	    int currentTotalSeconds = (currentHour * 60 * 60) + (currentMinute * 60);
+
+	    System.out.println("Files length: " + files.length);
+	    System.out.println("Start time length: " + start_act_time.length);
+	    System.out.println("List model size: " + listModel.getSize());
+	    	
+	    // Iterate from the end to the beginning, ensuring all elements are checked
+	    for (int i = files.length - 1; i >= 0; i--) {
+	        String[] end_time = end_act_time[i].split("∶");
+	        int endHour = Integer.parseInt(end_time[0]);
+	        int endMinute = Integer.parseInt(end_time[1]);
+	        int endSeconds = (endHour * 60 * 60) + (endMinute * 60);
+
+	        if (currentTotalSeconds >= endSeconds) {
+	            listModel.remove(i);
+	        }
+	    }
+	}
+	
+	//method to randomize activities
+	public static void randomizeActivities() {
+		//check if its been 24 hours since the UserSettinga.getStartHour() and UserSettings.getStartMinute()
+		//if yes randomize the activities
+		String currentTime = new java.text.SimpleDateFormat("HH∶mm").format(new java.util.Date());
+		String[] time = currentTime.split("∶");
+		int currentHour = Integer.parseInt(time[0]);
+		int currentMinute = Integer.parseInt(time[1]);
+		
+		if (currentHour == UserSettings.getStartHour() && currentMinute == UserSettings.getStartMinute()) {
+			// randomize activities
+			Exercisio.startGenerator();
+		}
+	}
+
+
+	//method to increment ability in user settings
+	public static void IncrementAbility() {
+	UserSettings.setEnduranceRate(UserSettings.getEnduranceRate() + 1);
+	UserSettings.setStrengthRate(UserSettings.getStrengthRate() + 1);
+	UserSettings.setBalanceRate(UserSettings.getBalanceRate() + 1);
+	UserSettings.setFlexibilityRate(UserSettings.getFlexibilityRate() + 1);
+	UserSettings.saveSettingsToFile();
+	}
+
+}
